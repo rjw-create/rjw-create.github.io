@@ -37,8 +37,8 @@
     </dl>
 
     <figure class="slot strait-hero">
-      <a href="assets/strait/signal-chain.png"><img src="assets/strait/signal-chain.png" width="1200" height="1094" alt="Block diagram of the signal chain. A 5 V USB power bank feeds an MT3608 boost converter (about 12 V), which powers a current source (LM324, TL431, 2N3904). Current flows through the soil from electrode A to B with a 10 ohm sense resistor in the loop. An electrode multiplexer (CD74HC4067) assigns the A, B, M and N roles. An instrumentation amplifier measures M minus N; two ADS1115 ADCs read the voltage (address 0x48) and the current (0x49); a Teensy 4.0 runs the sweep, computes resistivity and sends CSV over USB. A note says the Teensy pins are 3.3 V only."></a>
-      <figcaption>The signal chain, drawn during the design. The final build swapped the INA128 for an INA333 and drives the multiplexers straight from the Teensy, without the MCP23017.</figcaption>
+      <a href="assets/strait/photo-state-in-ground.jpg"><img src="assets/strait/photo-state-in-ground.jpg" width="1600" height="936" alt="The first version of STRAIT standing on bare soil in front of a brick wall: a long black 3D-printed body with a smaller box on top and a tube at each end, four metal probes pushed into the ground beneath it, and a yellow wire running along its side."></a>
+      <figcaption>The first version with its four probes in the ground. State, March 2026.</figcaption>
     </figure>
 
     <nav class="contents" aria-label="On this page">
@@ -49,6 +49,7 @@
         <li><a href="#example-scan">04 Example scan</a></li>
         <li><a href="#radar">05 The radar version</a></li>
         <li><a href="#code">06 The code</a></li>
+        <li><a href="#documents">07 Documents</a></li>
       </ol>
     </nav>
 
@@ -67,6 +68,10 @@
         <li><b>Converting</b> Two ADS1115 16-bit ADCs read that voltage and the real current through a 10 &Omega; sense resistor.</li>
         <li><b>Computing</b> A Teensy 4.0 runs the sweep, works out resistivity and sends the readings over USB as CSV.</li>
       </ol>
+      <figure class="slot strait-wide strait-hero">
+        <a href="assets/strait/signal-chain.png"><img src="assets/strait/signal-chain.png" width="1200" height="1094" alt="Block diagram of the signal chain. A 5 V USB power bank feeds an MT3608 boost converter (about 12 V), which powers a current source (LM324, TL431, 2N3904). Current flows through the soil from electrode A to B with a 10 ohm sense resistor in the loop. An electrode multiplexer (CD74HC4067) assigns the A, B, M and N roles. An instrumentation amplifier measures M minus N; two ADS1115 ADCs read the voltage (address 0x48) and the current (0x49); a Teensy 4.0 runs the sweep, computes resistivity and sends CSV over USB. A note says the Teensy pins are 3.3 V only."></a>
+        <figcaption>The signal chain, drawn during the design. The final build swapped the INA128 for an INA333 and drives the multiplexers straight from the Teensy, without the MCP23017.</figcaption>
+      </figure>
     </section>
 
     <section class="strait-section" id="circuit" aria-labelledby="circuit-title">
@@ -93,6 +98,30 @@
         <figure class="slot">
           <a href="assets/strait/enclosure-holes.png"><img src="assets/strait/enclosure-holes.png" width="1200" height="1152" alt="Drilling layout: the lid with an LED hole and a rocker switch cut-out, the short face with a USB cut-out aligned to the Teensy, and the long face with a slot for eight screw terminals and a hole to reach the MT3608 trimpot."></a>
           <figcaption>Drilling layout for the lid and panels.</figcaption>
+        </figure>
+      </div>
+
+      <h3 class="label strait-sub" id="photos-title">Photos</h3>
+      <div class="photo-strip" role="group" aria-labelledby="photos-title">
+        <figure class="slot">
+          <a href="assets/strait/photo-state-wiring.jpg"><img src="assets/strait/photo-state-wiring.jpg" width="1200" height="1600" alt="Inside the first version's black box: an Elegoo Uno board and a breadboard with an ADS1115 ADC module, a few resistors and bundles of jumper wires tied with cable ties."></a>
+          <figcaption>Inside the first version. State, March 2026.</figcaption>
+        </figure>
+        <figure class="slot">
+          <a href="assets/strait/photo-state-board.jpg"><img src="assets/strait/photo-state-board.jpg" width="1200" height="1908" alt="The state display board, headed Engineering Design, Designing tools for scientific discovery, with panels for the first and second iterations, the problem, the final product, a 2D sketch and the wiring, and the device sitting in a basket in front of it."></a>
+          <figcaption>The display board. State, March 2026.</figcaption>
+        </figure>
+        <figure class="slot">
+          <a href="assets/strait/photo-nationals-sand-box.jpg"><img src="assets/strait/photo-nationals-sand-box.jpg" width="1200" height="1600" alt="The final build seen from above: a red 3D-printed enclosure full of coloured jumper wires and breadboards, its clear lid open, sitting on a box of damp sand with brass electrode rods and white cables around it."></a>
+          <figcaption>The final build on a box of sand, lid open. Nationals, June 2026.</figcaption>
+        </figure>
+        <figure class="slot">
+          <a href="assets/strait/photo-nationals-wiring.jpg"><img src="assets/strait/photo-nationals-wiring.jpg" width="1200" height="1600" alt="Close-up inside the red enclosure: two small breadboards with ADC and amplifier modules, a long breadboard with two multiplexer boards, green screw terminals and many coloured jumper wires."></a>
+          <figcaption>Inside the final build. Nationals, June 2026.</figcaption>
+        </figure>
+        <figure class="slot">
+          <a href="assets/strait/photo-nationals-poster.jpg"><img src="assets/strait/photo-nationals-poster.jpg" width="1200" height="1600" alt="The nationals poster, titled MSIT, Modular Subsurface Imaging Tool, Making the invisible visible: an exploded render of the enclosure, three example pseudosections, the problem, solution and result, and a how-it-works diagram of the power, injection, sensing and control blocks."></a>
+          <figcaption>The poster, from when STRAIT was called MSIT. Nationals, June 2026.</figcaption>
         </figure>
       </div>
 
@@ -176,6 +205,45 @@
       <div class="prose">
         <p>The radar version's firmware, analysis script and parts list are public: <a href="https://github.com/rjw-create/ert-fmcw-radar">github.com/rjw-create/ert-fmcw-radar</a>.</p>
       </div>
+    </section>
+
+    <section class="strait-section" id="documents" aria-labelledby="documents-title">
+      <h2 class="section-title" id="documents-title"><span class="section-no">07</span> Documents</h2>
+      <div class="prose">
+        <p>Our documents from the state and national competitions.</p>
+      </div>
+      <ul class="docs">
+        <li class="document">
+          <h3>Electrode rail sketch</h3>
+          <dl class="document-facts">
+            <div><dt>Competition</dt><dd>State, February 2026</dd></div>
+            <div><dt>Format</dt><dd>PDF, 1 scanned page, 541 KB</dd></div>
+          </dl>
+          <p>A hand sketch of the electrode rail on graph paper: a 414 mm rail with a row of 3.95 mm holes, its 80 mm cross-section and the angle of its slot.</p>
+          <p><a href="assets/strait/strait-state-documentation.pdf" target="_blank" rel="noopener">Open the sketch (PDF, new tab)</a></p>
+        </li>
+        <li class="document">
+          <h3>Project documentation</h3>
+          <dl class="document-facts">
+            <div><dt>Competition</dt><dd>Nationals, June 2026</dd></div>
+            <div><dt>Format</dt><dd>Web page, 19 sections</dd></div>
+          </dl>
+          <p>The full write-up: the theory, signal chain, current pump, amplifier, firmware, the complete parts list, build steps, problems and fixes, and expected results.</p>
+          <p><a href="strait-nationals-documentation.html">Read the documentation</a></p>
+        </li>
+        <li class="document">
+          <h3>Trifold poster</h3>
+          <dl class="document-facts">
+            <div><dt>Competition</dt><dd>Nationals, June 2026</dd></div>
+            <div><dt>Format</dt><dd>PDF, 1 page, 28 &times; 36 in, 89 KB</dd></div>
+          </dl>
+          <figure class="document-preview">
+            <img src="assets/strait/strait-trifold-preview.png" width="1200" height="619" alt="Top of the trifold poster on a dark background: the title Electrical Resistivity Tomography Instrument, the electrode layout and resistivity formula, a simulated pseudosection, the signal chain, key specifications, the build sequence, engineering challenges, expected results and the conclusion.">
+          </figure>
+          <p>The poster for the display board: the problem, how it measures, the signal chain, the specifications and the results we expected.</p>
+          <p><a href="assets/strait/strait-trifold.pdf" target="_blank" rel="noopener">Open the poster (PDF, new tab)</a></p>
+        </li>
+      </ul>
     </section>
 
     <p class="strait-back"><a class="tool" href="index.html#strait">Back to the notebook</a></p>
