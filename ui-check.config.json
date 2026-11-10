@@ -1,0 +1,8 @@
+{
+  "serve": ".",
+  "pages": [
+    { "name": "home", "path": "/" }
+  ],
+  "widths_px": [375, 1280],
+  "ignore": ["/favicon\\.ico$"]
+}

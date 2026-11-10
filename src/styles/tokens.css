@@ -1,0 +1,84 @@
+/* Design tokens: the single source of truth for colour, type, spacing, shape and motion.
+   DESIGN.md explains when to use each one. Components use var(--token) only; scripts/check.sh
+   fails on raw colours anywhere outside this file and checks the contrast pairs DESIGN.md lists.
+   Tokens are named by role (--color-text-muted), not by value (--grey-600), so a theme change
+   is an edit here and nowhere else. */
+:root {
+  color-scheme: light dark;
+
+  /* Colour: light theme */
+  --color-bg: #fafaf7;            /* page background */
+  --color-surface: #ffffff;       /* cards, inputs, menus */
+  --color-text: #1a1a1a;          /* body text */
+  --color-text-muted: #5c5c58;    /* secondary text, captions */
+  --color-border: #e4e4df;        /* decorative dividers (no contrast target) */
+  --color-border-strong: #8a8a84; /* input and control outlines (3:1) */
+  --color-accent: #2759c7;        /* primary buttons, links */
+  --color-on-accent: #ffffff;     /* text on an accent fill */
+  --color-danger: #b4380a;        /* errors, destructive actions */
+  --color-success: #13733a;       /* confirmations */
+  --color-focus: #2759c7;         /* focus ring */
+
+  /* Type: three families, one job each. These system stacks are placeholders: choose fonts
+     that fit the project's personality in DESIGN.md rather than a habitual default. */
+  --font-display: Georgia, "Times New Roman", serif;          /* headings */
+  --font-body: ui-sans-serif, system-ui, sans-serif;          /* everything else */
+  --font-data: ui-monospace, Consolas, "Courier New", monospace; /* numbers, code, tables */
+  --text-display: 2.5rem;  /* 40px: one per page at most */
+  --text-title: 2rem;      /* 32px: page title */
+  --text-heading: 1.5rem;  /* 24px: section heading */
+  --text-subheading: 1.25rem; /* 20px */
+  --text-body: 1rem;       /* 16px */
+  --text-small: 0.875rem;  /* 14px: the floor, nothing smaller */
+  --leading-tight: 1.2;    /* headings */
+  --leading-body: 1.5;     /* paragraphs */
+
+  /* Space: 8px scale (--space-N = N x 8px); --space-half is for tight icon gaps only */
+  --space-half: 4px;
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-8: 64px;
+
+  /* Shape */
+  --radius-sm: 4px;   /* chips, tags */
+  --radius: 8px;      /* buttons, inputs, cards */
+  --radius-lg: 16px;  /* dialogs, large panels */
+
+  /* Elevation: use sparingly; most surfaces are flat with a border */
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.08);   /* raised: cards on hover */
+  --shadow-2: 0 8px 24px rgb(0 0 0 / 0.12);  /* overlay: menus, dialogs */
+
+  /* Motion */
+  --duration-fast: 120ms; /* hovers, toggles */
+  --duration: 200ms;      /* panels, menus */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #121212;
+    --color-surface: #1c1c1c;
+    --color-text: #f2f2ee;
+    --color-text-muted: #a8a8a3;
+    --color-border: #2e2e2c;
+    --color-border-strong: #7a7a74;
+    --color-accent: #7aa2ff;
+    --color-on-accent: #0b0b0b;
+    --color-danger: #ff8a5c;
+    --color-success: #4cc77a;
+    --color-focus: #7aa2ff;
+    --shadow-1: 0 1px 2px rgb(0 0 0 / 0.5);
+    --shadow-2: 0 8px 24px rgb(0 0 0 / 0.6);
+  }
+}
+
+/* People who ask their OS for less motion get none. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration: 0ms;
+  }
+}

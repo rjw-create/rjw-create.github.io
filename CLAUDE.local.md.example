@@ -1,0 +1,7 @@
+# CLAUDE.local.md — your personal notes for THIS repo (gitignored, not shared)
+
+<!-- Rename to CLAUDE.local.md. Claude loads it alongside CLAUDE.md. -->
+
+- My local dev server runs on port 3001 (3000 is taken by another project).
+- My Python venv is at .venv; activate with `source .venv/bin/activate`.
+- I'm learning this codebase: explain non-obvious choices as you make them.

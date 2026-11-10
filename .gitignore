@@ -1,0 +1,17 @@
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/.last-stop-block
+.claude/.skip-stop-verify
+*.bak
+.env
+.env.*
+!.env.example
+__pycache__/
+.venv/
+node_modules/
+.claude/worktrees/
+.claude/.last-stop-pass
+.claude/.verify-any-*
+.claude/.kit-installed
+test-results/
+.playwright-mcp/
