@@ -217,6 +217,25 @@ a:hover { text-decoration-thickness: var(--border-width); }
 .trail { width: 18%; aspect-ratio: 1; border-radius: 50%; background: var(--color-rival); }
 .trail-old { width: 12%; }
 
+/* Revealed moves of the winning line: their numbers in the square's corner, clear of pieces and stars. */
+.move-no {
+  position: absolute;
+  top: var(--space-half);
+  left: var(--space-half);
+  font-family: var(--font-data);
+  font-size: var(--text-small);
+  line-height: 1;
+  color: var(--color-accent);
+  pointer-events: none;
+}
+.moves {
+  max-width: var(--size-board);
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-data);
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
+}
+
 /* Pieces sit above the grid and slide between squares. */
 .piece {
   position: absolute;

@@ -109,9 +109,42 @@ test("level 3's hint shows after the second loss, not before", () => {
   assert.equal(R.hintFor(level3, 3), "Hint: It chases the star nearest you. Lead it somewhere else first.");
 });
 
-test("levels without their own hint still name the winning first step after two losses", () => {
-  const level1 = R.LEVELS[0];
-  assert.equal(R.hintFor(level1, 1), null);
-  const first = R.winningMoves(R.startState(level1))[0].dir;
-  assert.equal(R.hintFor(level1, 2), `Hint: your first step should be ${first}.`);
+test("only level 3 has a text hint", () => {
+  for (const [i, level] of R.LEVELS.entries()) {
+    if (i === 2) continue;
+    assert.equal(R.hintFor(level, 5), null, `level ${i + 1}`);
+  }
+});
+
+for (const [i, level] of R.LEVELS.entries()) {
+  test(`level ${i + 1} (${level.name}): its solution wins and takes every star on its last move`, () => {
+    let s = R.startState(level);
+    for (const [n, dir] of level.solution.entries()) {
+      assert.equal(R.isOver(s), false, `the level ended before move ${n + 1}`);
+      const move = R.legalMoves(s.you, s.rival).find((m) => m.dir === dir);
+      assert.ok(move, `move ${n + 1} (${dir}) is not legal`);
+      s = R.play(s, move.to).state;
+    }
+    assert.equal(R.isOver(s), true, "stars are left after the last move");
+    assert.ok(s.mine > s.theirs, `ends ${s.mine} to ${s.theirs}`);
+    assert.equal(level.solution[0], R.winningMoves(R.startState(level))[0].dir, "starts with a winning first move");
+    assert.deepEqual(R.solutionPath(level, level.solution.length).map((p) => p.sq).at(-1), s.you);
+  });
+}
+
+test("level 3's solution is the line visitors are shown", () => {
+  assert.deepEqual(R.LEVELS[2].solution,
+    ["left", "left", "right", "right", "left", "right", "down", "right", "down", "down", "down", "right"]);
+  assert.deepEqual(R.solutionPath(R.LEVELS[2], 3), [
+    { no: 1, dir: "left", sq: 1 }, { no: 2, dir: "left", sq: 0 }, { no: 3, dir: "right", sq: 1 }]);
+});
+
+test("moves are offered one loss after the text hint, or from the second loss without one", () => {
+  const [level1, , level3] = R.LEVELS;
+  assert.equal(R.canRevealMove(level3, 2, 0), false);
+  assert.equal(R.canRevealMove(level3, 3, 0), true);
+  assert.equal(R.canRevealMove(level1, 1, 0), false);
+  assert.equal(R.canRevealMove(level1, 2, 0), true);
+  assert.equal(R.canRevealMove(level1, 9, level1.solution.length - 1), true);
+  assert.equal(R.canRevealMove(level1, 9, level1.solution.length), false, "nothing left to reveal");
 });

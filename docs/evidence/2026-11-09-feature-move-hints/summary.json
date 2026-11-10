@@ -1,0 +1,63 @@
+{
+  "date": "2026-11-09",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "widths_px": [
+    375,
+    1280
+  ],
+  "base": "http://127.0.0.1:8656",
+  "contrast": {
+    "status": "pass",
+    "cmd": "node scripts/design-check.mjs",
+    "tail": "Contrast (WCAG 2.2, colours from src/styles/tokens.css) | DESIGN CHECK PASSED"
+  },
+  "pages": [
+    {
+      "name": "home",
+      "path": "/",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-09-feature-move-hints/home-375px-light.png",
+        "docs/evidence/2026-11-09-feature-move-hints/home-1280px-light.png",
+        "docs/evidence/2026-11-09-feature-move-hints/home-375px-dark.png",
+        "docs/evidence/2026-11-09-feature-move-hints/home-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "level-4-hidden-rule",
+      "path": "/#level-4",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-09-feature-move-hints/level-4-hidden-rule-375px-light.png",
+        "docs/evidence/2026-11-09-feature-move-hints/level-4-hidden-rule-1280px-light.png",
+        "docs/evidence/2026-11-09-feature-move-hints/level-4-hidden-rule-375px-dark.png",
+        "docs/evidence/2026-11-09-feature-move-hints/level-4-hidden-rule-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "reading-view",
+      "path": "/#story",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-09-feature-move-hints/reading-view-375px-light.png",
+        "docs/evidence/2026-11-09-feature-move-hints/reading-view-1280px-light.png",
+        "docs/evidence/2026-11-09-feature-move-hints/reading-view-375px-dark.png",
+        "docs/evidence/2026-11-09-feature-move-hints/reading-view-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "strait",
+      "path": "/strait.html",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-09-feature-move-hints/strait-375px-light.png",
+        "docs/evidence/2026-11-09-feature-move-hints/strait-1280px-light.png",
+        "docs/evidence/2026-11-09-feature-move-hints/strait-375px-dark.png",
+        "docs/evidence/2026-11-09-feature-move-hints/strait-1280px-dark.png"
+      ]
+    }
+  ]
+}

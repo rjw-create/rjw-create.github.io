@@ -34,6 +34,7 @@
     <div class="board-sheet">
       <div class="board" id="board" role="group" aria-label="Board, 5 by 5" aria-describedby="rule"></div>
     </div>
+    <p class="moves" id="moves" aria-live="polite" hidden></p>
   </div>
 
   <div class="side">
@@ -42,6 +43,7 @@
     <p class="status" id="status" role="status" aria-live="polite"></p>
     <p class="hint" id="hint" hidden></p>
     <div class="controls">
+      <button class="tool" type="button" id="reveal" hidden>Show the next move</button>
       <button class="tool" type="button" id="retry">Retry level</button>
       <button class="tool" type="button" id="skip">Skip level</button>
     </div>

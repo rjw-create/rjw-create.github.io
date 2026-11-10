@@ -15,7 +15,7 @@
 
   const els = {
     game: $("game"), board: $("board"), pathList: $("path-list"), title: $("level-title"), rule: $("rule"),
-    status: $("status"), hint: $("hint"), retry: $("retry"), skip: $("skip"), hudLevel: $("hud-level"),
+    status: $("status"), hint: $("hint"), moves: $("moves"), reveal: $("reveal"), retry: $("retry"), skip: $("skip"), hudLevel: $("hud-level"),
     hudScore: $("hud-score"), sound: $("sound"), readToggle: $("read-toggle"), backToGame: $("back-to-game"),
     reading: $("reading"), sheet: $("sheet"), sheetLabel: $("sheet-label"), sheetPage: $("sheet-page"),
     sheetNext: $("sheet-next"), sheetBack: $("sheet-back"),
@@ -23,6 +23,9 @@
 
   // Per-visit progress: "won" or "skipped" for each level, losses on the current level.
   const progress = LEVELS.map(() => "");
+  // Moves of each level's winning line shown so far; kept for the visit, even after leaving the level.
+  const revealed = LEVELS.map(() => 0);
+  let path = []; // { no, dir, sq } for each revealed move of the current level
   let levelIndex = 0;
   let losses = 0;
   let state = null;
@@ -208,7 +211,22 @@
     if (state.stars.includes(sq)) parts.push("star");
     const t = trail.indexOf(sq);
     if (t >= 0) parts.push(t === trail.length - 1 ? "the rival's last square" : "the rival's square before that");
+    path.filter((p) => p.sq === sq).forEach((p) => parts.push(`Move ${p.no}: ${p.dir}`));
     return parts.join(", ");
+  }
+
+  // A square can be on the line more than once (level 3 steps back and forth), so it lists every number.
+  function moveNumbers(sq) {
+    const nos = path.filter((p) => p.sq === sq).map((p) => p.no);
+    return nos.length ? `<span class="move-no" aria-hidden="true">${nos.join(" ")}</span>` : "";
+  }
+
+  function showMoves() {
+    path = R.solutionPath(LEVELS[levelIndex], revealed[levelIndex]);
+    els.moves.hidden = path.length === 0;
+    const text = path.length ? `Moves so far: ${path.map((p) => p.dir).join(", ")}` : "";
+    // It is a live region: rewriting the same words on every Retry would read them out again.
+    if (els.moves.textContent !== text) els.moves.textContent = text;
   }
 
   function render() {
@@ -219,6 +237,7 @@
       const t = trail.indexOf(sq);
       b.innerHTML = state.stars.includes(sq) ? STAR_SVG
         : t >= 0 ? `<span class="trail${t < trail.length - 1 ? " trail-old" : ""}"></span>` : "";
+      b.insertAdjacentHTML("beforeend", moveNumbers(sq));
       b.disabled = !move;
       if (move) b.dataset.legal = move.dir;
       else delete b.dataset.legal;
@@ -249,7 +268,9 @@
     els.rule.innerHTML = ruleHtml(level);
     els.status.textContent = "";
     els.status.className = "status";
+    els.reveal.hidden = true;
     showHint();
+    showMoves();
     renderPath(false);
     render();
   }
@@ -313,6 +334,7 @@
       els.status.textContent = said.join(" ");
       sound.lose();
       showHint();
+      els.reveal.hidden = !R.canRevealMove(level, losses, revealed[levelIndex]);
       els.retry.focus();
     }
   }
@@ -341,6 +363,15 @@
     startLevel(levelIndex);
     const first = cells.find((b) => !b.disabled);
     if (first) first.focus();
+  });
+  // One more move per loss: the button hides once used and comes back on the next loss. Focus goes to Retry,
+  // the next thing to do; the moves line under the board is a live region, so the new move is read out.
+  els.reveal.addEventListener("click", () => {
+    revealed[levelIndex] += 1;
+    els.reveal.hidden = true;
+    showMoves();
+    render();
+    els.retry.focus();
   });
   els.skip.addEventListener("click", () => {
     if (progress[levelIndex] !== "won") progress[levelIndex] = "skipped";
