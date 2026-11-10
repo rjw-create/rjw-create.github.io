@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STRAIT: Jackson Raines</title>
+<meta name="description" content="STRAIT, a portable ground-imaging instrument built for TSA Engineering Design: how it works, the circuit, the build, example scans and the code.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap">
+<link rel="stylesheet" href="src/styles/tokens.css">
+<link rel="stylesheet" href="src/styles/site.css">
+</head>
+<body>
+
+<header class="page-bar">
+  <p class="hud-name">Jackson Raines</p>
+  <a class="tool" href="index.html#strait">Back to the notebook</a>
+</header>
+
+<main class="notebook">
+  <article class="entry strait" aria-labelledby="strait-title">
+    <header class="entry-head">
+      <p class="entry-meta"><span>Entry 04</span><span>Engineering design team lead</span><span>2025 to 2026</span></p>
+      <h1 class="entry-title" id="strait-title">STRAIT</h1>
+    </header>
+
+    <div class="prose strait-lede">
+      <p>A portable ground-imaging instrument: electrical resistivity tomography, with an earlier FMCW radar version. I led the engineering design team. We won the state TSA Engineering Design title, a first for my school.</p>
+    </div>
+
+    <dl class="counts" aria-label="STRAIT in numbers">
+      <div><dt>electrodes</dt><dd>8</dd></div>
+      <div><dt>electrode spacing</dt><dd>10 cm</dd></div>
+      <div><dt>ADC resolution</dt><dd>16-bit</dd></div>
+      <div><dt>amplifier gain</dt><dd>1001</dd></div>
+    </dl>
+
+    <figure class="slot strait-hero">
+      <a href="assets/strait/signal-chain.png"><img src="assets/strait/signal-chain.png" width="1200" height="1094" alt="Block diagram of the signal chain. A 5 V USB power bank feeds an MT3608 boost converter (about 12 V), which powers a current source (LM324, TL431, 2N3904). Current flows through the soil from electrode A to B with a 10 ohm sense resistor in the loop. An electrode multiplexer (CD74HC4067) assigns the A, B, M and N roles. An instrumentation amplifier measures M minus N; two ADS1115 ADCs read the voltage (address 0x48) and the current (0x49); a Teensy 4.0 runs the sweep, computes resistivity and sends CSV over USB. A note says the Teensy pins are 3.3 V only."></a>
+      <figcaption>The signal chain, drawn during the design. The final build swapped the INA128 for an INA333 and drives the multiplexers straight from the Teensy, without the MCP23017.</figcaption>
+    </figure>
+
+    <nav class="contents" aria-label="On this page">
+      <ol>
+        <li><a href="#how-it-works">01 How it works</a></li>
+        <li><a href="#circuit">02 The circuit</a></li>
+        <li><a href="#build">03 The build</a></li>
+        <li><a href="#example-scan">04 Example scan</a></li>
+        <li><a href="#radar">05 The radar version</a></li>
+        <li><a href="#code">06 The code</a></li>
+      </ol>
+    </nav>
+
+    <section class="strait-section" id="how-it-works" aria-labelledby="how-title">
+      <h2 class="section-title" id="how-title"><span class="section-no">01</span> How it works</h2>
+      <div class="prose">
+        <p>STRAIT pushes a known current into the ground through two electrodes and measures the small voltage between two others. The ratio says how strongly the ground resists current: air gaps and dry sand resist more, wet soil and metal resist less.</p>
+        <p>Eight brass electrodes sit in a line, 10 cm apart. In the final build the two end electrodes inject the current, and the multiplexers step the measuring pair along the six between them. Each position gives one reading; together they build a picture of the ground underneath.</p>
+      </div>
+      <p class="margin-note">Each reading is a few millivolts, so the amplifier and a 16-bit ADC do most of the work.</p>
+      <ol class="chain">
+        <li><b>Power</b> A 5 V USB power bank, boosted to about 12 V for the current source only.</li>
+        <li><b>Current source</b> A Howland current pump (LM324, TL431 reference) drives current between the injecting electrodes.</li>
+        <li><b>Switching</b> Two CD74HC4067 multiplexers choose which electrodes measure.</li>
+        <li><b>Measuring</b> An INA333 instrumentation amplifier (gain 1001) reads the voltage between the measuring pair.</li>
+        <li><b>Converting</b> Two ADS1115 16-bit ADCs read that voltage and the real current through a 10 &Omega; sense resistor.</li>
+        <li><b>Computing</b> A Teensy 4.0 runs the sweep, works out resistivity and sends the readings over USB as CSV.</li>
+      </ol>
+    </section>
+
+    <section class="strait-section" id="circuit" aria-labelledby="circuit-title">
+      <h2 class="section-title" id="circuit-title"><span class="section-no">02</span> The circuit</h2>
+      <div class="prose">
+        <p>The Teensy's pins are 3.3 V only, so the 12 V rail feeds nothing but the op-amp's supply, and every logic line and pull-up stays at 3.3 V. A single-supply INA333 replaced an earlier dual-rail amplifier and the isolated &plusmn;5 V converter it needed. The amplifier's reference voltage is read live and subtracted in firmware, so drift cancels out.</p>
+      </div>
+      <figure class="slot strait-wide">
+        <a href="assets/strait/circuit.png"><img src="assets/strait/circuit.png" width="2000" height="1431" alt="Full circuit schematic on a dark background: the power bank and MT3608 boost, the Howland current injection stage with the LM324 and TL431, the INA333 measurement module, two ADS1115 ADCs on the I2C bus, two MCP23017 expanders, four CD74HC4067 multiplexers and eight brass electrodes in a soil box, with the resistivity formula and a 3.3 V safety note."></a>
+        <figcaption>The full schematic from the design stage, a Wenner array with MCP23017 expanders that the final build dropped. Open it full size to read the labels.</figcaption>
+      </figure>
+    </section>
+
+    <section class="strait-section" id="build" aria-labelledby="build-title">
+      <h2 class="section-title" id="build-title"><span class="section-no">03</span> The build</h2>
+      <div class="prose">
+        <p>Everything fits in a 200 &times; 150 mm junction box: the Teensy and ADCs on top, one stripboard with the multiplexers, amplifier and current source, and the power bank on a Velcro shelf. The electrodes connect through screw terminals on the long side.</p>
+      </div>
+      <div class="strait-figs">
+        <figure class="slot">
+          <a href="assets/strait/enclosure-interior.png"><img src="assets/strait/enclosure-interior.png" width="1200" height="829" alt="Top view of the enclosure interior, 200 by 150 mm: Teensy 4.0 (18 by 36 mm), two ADS1115 boards, a 100 by 100 mm stripboard with the multiplexers, amplifier and current source, the power bank on a Velcro shelf, the MT3608 boost board, and a 16-terminal panel strip for the electrode wires. USB leaves through the short side."></a>
+          <figcaption>Inside the box, top view.</figcaption>
+        </figure>
+        <figure class="slot">
+          <a href="assets/strait/enclosure-holes.png"><img src="assets/strait/enclosure-holes.png" width="1200" height="1152" alt="Drilling layout: the lid with an LED hole and a rocker switch cut-out, the short face with a USB cut-out aligned to the Teensy, and the long face with a slot for eight screw terminals and a hole to reach the MT3608 trimpot."></a>
+          <figcaption>Drilling layout for the lid and panels.</figcaption>
+        </figure>
+      </div>
+
+      <h3 class="label strait-sub" id="parts-title">Priced parts list</h3>
+      <div class="table-scroll" role="region" aria-labelledby="parts-title" tabindex="0">
+        <table class="parts">
+          <thead>
+            <tr><th scope="col">Part</th><th scope="col">Qty</th><th scope="col">Cost</th></tr>
+          </thead>
+          <tbody>
+            <tr class="parts-group"><th scope="rowgroup" colspan="3">Control and switching</th></tr>
+            <tr><td>Teensy 4.0</td><td>1</td><td>$24.25</td></tr>
+            <tr><td>MCP23017 GPIO expander (later dropped)</td><td>2</td><td>$11.90</td></tr>
+            <tr><td>CD74HC4067 16-channel multiplexer</td><td>2</td><td>$7.00</td></tr>
+            <tr><td>ADS1115 16-bit ADC</td><td>2</td><td>$7.33</td></tr>
+            <tr><td>BSS138 logic level shifter</td><td>2</td><td>$4.00</td></tr>
+            <tr class="parts-group"><th scope="rowgroup" colspan="3">Signal chain</th></tr>
+            <tr><td>INA333 instrumentation amplifier module</td><td>1</td><td>$11.99</td></tr>
+            <tr><td>LM324 quad op-amp</td><td>1</td><td>$0.60</td></tr>
+            <tr><td>TL431 voltage reference</td><td>1</td><td>$0.70</td></tr>
+            <tr class="parts-group"><th scope="rowgroup" colspan="3">Power</th></tr>
+            <tr><td>MT3608 boost converter</td><td>1</td><td>$2.50</td></tr>
+            <tr><td>USB power bank, 10,000 mAh</td><td>1</td><td>$10.00</td></tr>
+            <tr class="parts-group"><th scope="rowgroup" colspan="3">Electrodes and wiring</th></tr>
+            <tr><td>Brass rod, 1/4 in &times; 12 in</td><td>8</td><td>$12.00</td></tr>
+            <tr><td>Shielded 22 AWG cable</td><td>1 roll</td><td>$20.00</td></tr>
+            <tr><td>Screw terminal block, 4-position</td><td>2</td><td>$3.00</td></tr>
+            <tr class="parts-group"><th scope="rowgroup" colspan="3">Passives</th></tr>
+            <tr><td>10 k&Omega; 0.1% resistors (current pump)</td><td>4</td><td>$2.00</td></tr>
+            <tr><td>10 k&Omega; 1% resistors (reference divider)</td><td>2</td><td>$0.10</td></tr>
+            <tr><td>4.7 k&Omega; resistors (I2C pull-ups)</td><td>2</td><td>$0.10</td></tr>
+            <tr><td>10 &Omega; 1% sense resistor</td><td>1</td><td>$0.30</td></tr>
+            <tr><td>100 nF capacitors</td><td>3</td><td>$0.15</td></tr>
+            <tr class="parts-group"><th scope="rowgroup" colspan="3">Build and enclosure</th></tr>
+            <tr><td>Perfboard, 100 &times; 100 mm</td><td>2</td><td>$6.00</td></tr>
+            <tr><td>Junction box, 200 &times; 150 &times; 90 mm</td><td>1</td><td>$8.00</td></tr>
+            <tr><td>M2.5 standoff kit</td><td>1</td><td>$5.00</td></tr>
+            <tr><td>Resistor kit</td><td>1</td><td>$10.00</td></tr>
+            <tr><td>Capacitor kit</td><td>1</td><td>$8.00</td></tr>
+            <tr><td>Hookup wire kit, 22 AWG</td><td>1</td><td>$8.00</td></tr>
+            <tr><td>Heat-shrink and USB cable</td><td>1</td><td>$7.00</td></tr>
+            <tr><td>Digital multimeter</td><td>1</td><td>$25.00</td></tr>
+            <tr><td>Solderless breadboard</td><td>2</td><td>$10.00</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><th scope="row" colspan="2">Total of these lines</th><td>$204.92</td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <p class="table-note">Prices from Amazon and Digi-Key at the time of the build, for the smallest pack available.</p>
+    </section>
+
+    <section class="strait-section" id="example-scan" aria-labelledby="scan-title">
+      <h2 class="section-title" id="scan-title"><span class="section-no">04</span> Example scan</h2>
+      <div class="prose">
+        <p>These two plots come from an example data file, not a field scan. They show what the software does with a sweep: the pseudosection places each reading under its electrodes, and the inversion turns those readings into an estimate of the resistivity at each depth.</p>
+      </div>
+      <figure class="slot strait-wide">
+        <a href="assets/strait/example-pseudosection.png"><img src="assets/strait/example-pseudosection.png" width="1400" height="667" alt="Apparent resistivity pseudosection from the example file: seven diamond-shaped readings at two depth levels under electrodes e0 to e7, mostly low (15 to 16 ohm metres) with two high readings of 72 and 94 ohm metres near the middle."></a>
+        <figcaption>Pseudosection, example data.</figcaption>
+      </figure>
+      <figure class="slot strait-wide">
+        <a href="assets/strait/example-inversion.png"><img src="assets/strait/example-inversion.png" width="1600" height="636" alt="Two panels from the example file: on the left the raw apparent resistivity readings by position and pseudo-depth; on the right the inverted true resistivity down to about 17 cm, from pyGIMLi, with the higher values near the middle of the line."></a>
+        <figcaption>Inversion with pyGIMLi, example data.</figcaption>
+      </figure>
+    </section>
+
+    <section class="strait-section" id="radar" aria-labelledby="radar-title">
+      <h2 class="section-title" id="radar-title"><span class="section-no">05</span> The radar version</h2>
+      <div class="prose">
+        <p>The first version paired four resistivity probes with a 24 GHz FMCW radar module on an Arduino, and logged both channels together. Radar could not see through soil, so the final build dropped it and kept resistivity.</p>
+      </div>
+      <figure class="slot strait-wide">
+        <a href="assets/strait/radar-scan-dashboard.png"><img src="assets/strait/radar-scan-dashboard.png" width="1200" height="1050" alt="Scan dashboard from the radar version over 180 scan positions: a voltage heatmap and traces for the resistivity probes, the radar's reflected energy and detection distance with two peaks near the start and end of the scan, and a combined anomaly indicator with the same two peaks."></a>
+        <figcaption>Field test, earlier radar version.</figcaption>
+      </figure>
+    </section>
+
+    <section class="strait-section" id="code" aria-labelledby="code-title">
+      <h2 class="section-title" id="code-title"><span class="section-no">06</span> The code</h2>
+      <div class="prose">
+        <p>The radar version's firmware, analysis script and parts list are public: <a href="https://github.com/rjw-create/ert-fmcw-radar">github.com/rjw-create/ert-fmcw-radar</a>.</p>
+      </div>
+    </section>
+
+    <p class="strait-back"><a class="tool" href="index.html#strait">Back to the notebook</a></p>
+  </article>
+</main>
+
+</body>
+</html>

@@ -18,6 +18,7 @@ Approved wireframes are what `verify-app` compares the built page against. Add a
 | Date | Screen | Artifact | Status |
 | --- | --- | --- | --- |
 | 2026-11-09 | Home | "2026-11-09 Personal site directions" canvas (private; this repo is public, so no link) | built |
+| 2026-11-09 | STRAIT page (`strait.html`) | "2026-11-09 STRAIT notebook page" canvas (private, no link) | built |
 
 ## Personality
 Three words, and what each means in practice.
@@ -143,6 +144,8 @@ Build from this list before inventing something new. Add a row when a component 
 | Notebook entry | in the reading view, or borrowed by the sheet | static | `<article class="entry" id="story">` | src/styles/site.css |
 | Counts strip | 2-3 counts | static | `<dl class="counts">` | src/styles/site.css |
 | Media slot | wide, normal | placeholder, filled (video or img) | `<figure class="slot">` | src/styles/site.css |
+| Contents strip | wraps to rows on phones | default, hover, focus | `<nav class="contents"><ol><li><a href="#circuit">02 The circuit</a></li></ol></nav>` | src/styles/site.css |
+| Parts table | group rows, total row | scrolls sideways in its box when narrow | `<div class="table-scroll" role="region" tabindex="0"><table class="parts">` | src/styles/site.css |
 
 Every async view has empty, loading and error states. Every interactive element has a visible focus state.
 
@@ -166,6 +169,7 @@ One row per approved UI choice; the full record (context, options, decision, con
 | Date | Decision | Options (artifact) | Chosen, and what was merged in | Record |
 | --- | --- | --- | --- | --- |
 | 2026-11-09 | Homepage direction | A Field notebook, B Playable front door, C Instrument readout, D Liner notes | B as the whole site (levels = entries, after Jackson's "centered around the game" feedback), with A's notebook texture, C's counts strip and D's track list as the level path | docs/decisions/2026-11-09-homepage-direction.md |
+| 2026-11-09 | STRAIT notebook page | A Notebook spread, B Signal-chain index, C Spec sheet and plates | A's entry and story order, with B's contents strip (not a sidebar) and C's counts strip | docs/decisions/2026-11-09-strait-notebook-page.md |
 
 ## Avoid
 Models drift to the same generic look when left to default. Name what this project avoids.

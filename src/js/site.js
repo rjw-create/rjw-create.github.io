@@ -255,13 +255,9 @@
   }
 
   function showHint() {
-    if (losses < 2) {
-      els.hint.hidden = true;
-      return;
-    }
-    const first = R.winningMoves(R.startState(LEVELS[levelIndex]))[0];
-    els.hint.hidden = false;
-    els.hint.textContent = `Hint: your first step should be ${first.dir}.`;
+    const text = R.hintFor(LEVELS[levelIndex], losses);
+    els.hint.hidden = !text;
+    if (text) els.hint.textContent = text;
   }
 
   function tryMove(to) {

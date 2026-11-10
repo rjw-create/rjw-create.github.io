@@ -479,8 +479,86 @@ mark { padding: 0 var(--space-half); background: var(--color-highlight); color: 
   overflow-wrap: anywhere;
 }
 
+/* ---------------------------------------------------------------- the STRAIT notebook page (strait.html) */
+/* One long notebook entry (wireframe A), a contents strip (B) and a counts strip on the first screen (C). */
+.page-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg);
+  border-bottom: var(--border-width) solid var(--color-text);
+}
+/* min-width 0: as a grid item it would otherwise stretch to the parts table's width and scroll the page sideways. */
+.notebook { min-width: 0; padding: var(--space-3) 0 var(--space-6); }
+.notebook .entry { margin-bottom: 0; }
+.strait-lede { margin-top: var(--space-3); }
+.strait-hero { margin: var(--space-4) 0; }
+.slot a { display: block; }
+
+.contents { margin: var(--space-4) 0 0; }
+.contents ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+.contents a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--size-tap);
+  padding: 0 var(--space-2);
+  border-top: var(--border-width-heavy) solid var(--color-border-strong);
+  background: var(--color-sunken);
+  font-family: var(--font-data);
+  font-size: var(--text-small);
+  text-decoration: none;
+}
+.contents a:hover { text-decoration: underline; }
+
+.strait-section { margin-top: var(--space-8); }
+.section-title {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--text-heading);
+  line-height: var(--leading-tight);
+}
+.section-no { font-family: var(--font-data); font-weight: 500; color: var(--color-pen); }
+.strait-sub { margin-top: var(--space-4); }
+.strait-wide { margin-top: var(--space-4); }
+
+.chain { max-width: var(--measure); margin: 0; padding-left: var(--space-3); }
+.chain li { margin-bottom: var(--space-1); }
+.chain b { display: block; font-family: var(--font-data); font-size: var(--text-small); font-weight: 500; }
+
+.strait-figs { display: grid; gap: var(--space-4); margin-top: var(--space-4); }
+
+.table-scroll { margin-top: var(--space-1); overflow-x: auto; border: var(--border-width) solid var(--color-text); }
+.parts { width: 100%; border-collapse: collapse; font-size: var(--text-small); }
+.parts th,
+.parts td { padding: var(--space-1) var(--space-2); border-top: 1px solid var(--color-border); text-align: left; }
+.parts thead th,
+.parts .parts-group th { font-family: var(--font-data); font-weight: 500; color: var(--color-text-muted); }
+.parts .parts-group th { background: var(--color-sunken); color: var(--color-text); }
+.parts td:nth-child(n + 2),
+.parts thead th:nth-child(n + 2),
+.parts tfoot td { text-align: right; font-family: var(--font-data); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.parts tfoot th,
+.parts tfoot td { border-top: var(--border-width) solid var(--color-text); font-weight: 500; }
+.table-note { margin: var(--space-1) 0 0; font-size: var(--text-small); color: var(--color-text-muted); }
+
+.strait-back { margin: var(--space-8) 0 0; }
+
 /* ---------------------------------------------------------------- wide screens */
 @media (min-width: 960px) {
+  .page-bar { padding: var(--space-2) var(--space-6); }
+  .strait-figs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .strait-hero { max-width: 880px; }
   .hud {
     grid-template-columns: auto 1fr auto auto auto;
     grid-template-areas: "name level score sound read";
