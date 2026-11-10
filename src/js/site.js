@@ -221,11 +221,11 @@
     });
     place(youPiece, state.you);
     place(rivalPiece, state.rival);
-    els.hudScore.innerHTML = `Stars: you <b>${state.mine}</b>, rival <b>${state.theirs}</b> · move <b>${Math.min(state.turn + 1, state.turns)}</b> of ${state.turns}`;
+    els.hudScore.innerHTML = `Stars: you <b>${state.mine}</b>, rival <b>${state.theirs}</b> · stars left <b>${state.stars.length}</b>`;
   }
 
   function ruleHtml(level) {
-    const goal = `<p class="rule-goal">Take more stars than the red rival in ${level.turns} moves.</p>`;
+    const goal = `<p class="rule-goal">Take more stars than the red rival. The level ends when all ${level.stars.length} stars are gone.</p>`;
     const keys = '<p class="rule-keys">You are the square. Tap a square next to it, or use the arrow keys on the board.</p>';
     if (!level.hidden) return `${goal}<p class="rule-text">${R.RULES[level.rule].text}</p>${keys}`;
     const list = Object.keys(R.RULES).map((id) => `<li>${R.RULES[id].text}</li>`).join("");

@@ -6,7 +6,7 @@
    - Then the rival steps by its rule. Rules A and B head for the star nearest to the rival, C for the star
      nearest to you. Each tries its four steps in a fixed order, takes the first that gets closer to one of
      those stars and never steps onto you. With no such step it waits.
-   - After the last turn, you win with more stars than the rival. */
+   - The level ends when every star has been taken; you win with more stars than the rival. */
 (function (root) {
   "use strict";
 
@@ -62,7 +62,7 @@
   }
 
   function startState(level) {
-    return { rule: level.rule, you: level.you, rival: level.rival, stars: level.stars.slice(), mine: 0, theirs: 0, turn: 0, turns: level.turns };
+    return { rule: level.rule, you: level.you, rival: level.rival, stars: level.stars.slice(), mine: 0, theirs: 0, turn: 0 };
   }
 
   // One full turn: your step to `to`, then the rival's. Returns a new state and what happened.
@@ -87,19 +87,75 @@
     return { state: s, events };
   }
 
-  const isOver = (s) => s.turn >= s.turns || s.stars.length === 0;
+  const isOver = (s) => s.stars.length === 0;
 
-  // Best final margin (mine - theirs) you can force from a state, by trying every line.
-  function bestMargin(s) {
-    if (isOver(s)) return s.mine - s.theirs;
-    const moves = legalMoves(s.you, s.rival);
-    if (moves.length === 0) return s.mine - s.theirs;
-    return Math.max(...moves.map((m) => bestMargin(play(s, m.to).state)));
+  // With no move limit you can walk in circles forever, so trying every line would never finish. Instead the
+  // solver lists every position reachable from a start (squares and stars left; at most 25 * 25 * 32), then
+  // repeats "best future margin = best over moves of (stars gained - stars lost) + that move's value" until
+  // nothing changes. Values only rise and a loop that takes no star gains nothing, so this settles. A position
+  // that can never empty the board keeps -Infinity, which the tests check never happens.
+  const keyOf = (s) => `${s.rule}|${s.you}|${s.rival}|${s.stars.slice().sort((a, b) => a - b).join(",")}`;
+  const futureCache = new Map();
+
+  function solveFrom(s0) {
+    const pending = [{ ...s0, mine: 0, theirs: 0, turn: 0 }];
+    const edges = new Map();
+    while (pending.length) {
+      const s = pending.pop();
+      const k = keyOf(s);
+      if (futureCache.has(k) || edges.has(k)) continue;
+      const out = [];
+      if (!isOver(s)) {
+        for (const m of legalMoves(s.you, s.rival)) {
+          const next = play(s, m.to).state;
+          const n = { ...next, mine: 0, theirs: 0, turn: 0 };
+          out.push({ gain: next.mine - next.theirs, key: keyOf(n) });
+          pending.push(n);
+        }
+      }
+      edges.set(k, out);
+    }
+    const value = new Map();
+    for (const [k, out] of edges) value.set(k, out.length ? -Infinity : 0);
+    const valueOf = (k) => (futureCache.has(k) ? futureCache.get(k) : value.get(k));
+    for (let changed = true; changed;) {
+      changed = false;
+      for (const [k, out] of edges) {
+        if (!out.length) continue;
+        const best = Math.max(...out.map((e) => e.gain + valueOf(e.key)));
+        if (best > value.get(k)) { value.set(k, best); changed = true; }
+      }
+    }
+    for (const [k, v] of value) futureCache.set(k, v);
   }
+
+  // Best margin (mine - theirs) still to come from a state's position, playing your best.
+  function futureMargin(s) {
+    const k = keyOf(s);
+    if (!futureCache.has(k)) solveFrom(s);
+    return futureCache.get(k);
+  }
+
+  // Best final margin (mine - theirs) you can force from a state.
+  const bestMargin = (s) => s.mine - s.theirs + futureMargin(s);
 
   // Moves from a state that still allow a win.
   function winningMoves(s) {
     return legalMoves(s.you, s.rival).filter((m) => bestMargin(play(s, m.to).state) > 0);
+  }
+
+  // Every position reachable from a level's start, whatever you do (for tests).
+  function reachableStates(level) {
+    const seen = new Map();
+    const pending = [startState(level)];
+    while (pending.length) {
+      const s = pending.pop();
+      const k = keyOf(s);
+      if (seen.has(k)) continue;
+      seen.set(k, s);
+      if (!isOver(s)) for (const m of legalMoves(s.you, s.rival)) pending.push(play(s, m.to).state);
+    }
+    return [...seen.values()];
   }
 
   // First moves that step toward your nearest star: the move a level is built to make tempting.
@@ -118,15 +174,16 @@
 
   // One level per notebook entry. Squares count 0 to 24, left to right, top row first.
   // tests/rival.test.js proves each one is winnable (levels 2-4: exactly one winning first move, not the
-  // step toward your nearest star) and that level 4's trail fits only its hidden rule.
+  // step toward your nearest star) and that level 4's trail fits only its hidden rule. Without the old move
+  // limit, level 3's star 16 moved to 18 and level 4's start moved from 10 to 5 (docs/decisions, 2026-11-09).
   const LEVELS = [
-    { id: "story", name: "Story", rule: "A", hidden: false, you: 12, rival: 4, stars: [1, 5, 16, 20], turns: 3 },
-    { id: "pathways", name: "Pathways", rule: "B", hidden: false, you: 23, rival: 11, stars: [3, 6, 8, 20, 21], turns: 4 },
-    { id: "mission-board", name: "Mission Board", rule: "C", hidden: false, you: 2, rival: 19, stars: [10, 16, 17, 23, 24], turns: 4 },
-    { id: "strait", name: "STRAIT", rule: "B", hidden: true, you: 10, rival: 22, stars: [0, 2, 8, 13, 18], turns: 4, trail: [20, 21] },
+    { id: "story", name: "Story", rule: "A", hidden: false, you: 12, rival: 4, stars: [1, 5, 16, 20] },
+    { id: "pathways", name: "Pathways", rule: "B", hidden: false, you: 23, rival: 11, stars: [3, 6, 8, 20, 21] },
+    { id: "mission-board", name: "Mission Board", rule: "C", hidden: false, you: 2, rival: 19, stars: [10, 17, 18, 23, 24] },
+    { id: "strait", name: "STRAIT", rule: "B", hidden: true, you: 5, rival: 22, stars: [0, 2, 8, 13, 18], trail: [20, 21] },
   ];
 
-  const api = { N, DIRS, RULES, LEVELS, rowOf, colOf, dist, squareName, stepTo, dirBetween, legalMoves, rivalStep, startState, play, isOver, bestMargin, winningMoves, greedyFirstMoves, rulesFitting };
+  const api = { N, DIRS, RULES, LEVELS, rowOf, colOf, dist, squareName, stepTo, dirBetween, legalMoves, rivalStep, startState, play, isOver, bestMargin, futureMargin, winningMoves, reachableStates, greedyFirstMoves, rulesFitting };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.Rival = api;
 })(this);
