@@ -124,6 +124,11 @@
 
   function showEntry(i, how) {
     const level = LEVELS[i];
+    // A level already beaten, picked again from the path, reopens its page (the user, 2026-11-09).
+    if (how === "review") {
+      showSheet(`Level ${i + 1}: ${level.name}. You beat this one.`, $(level.id), "Replay this level", () => startLevel(i));
+      return;
+    }
     const isLast = i === LEVELS.length - 1;
     const label = how === "won" ? `Level ${i + 1} won. Entry opened: ${level.name}.` : `Level ${i + 1} skipped. Here is the entry anyway: ${level.name}.`;
     showSheet(label, $(level.id), isLast ? "Finale: contact" : `Next level: ${LEVELS[i + 1].name}`, () => {
@@ -144,7 +149,7 @@
   // ------------------------------------------------------------ level path (D's track list)
   function renderPath(finale) {
     els.pathList.textContent = "";
-    const items = LEVELS.map((l, i) => ({ no: String(i + 1).padStart(2, "0"), name: l.name, state: progress[i], go: () => startLevel(i), current: !finale && i === levelIndex }));
+    const items = LEVELS.map((l, i) => ({ no: String(i + 1).padStart(2, "0"), name: l.name, state: progress[i], go: () => (progress[i] === "won" ? showEntry(i, "review") : startLevel(i)), current: !finale && i === levelIndex }));
     items.push({ no: "05", name: "Contact", state: "finale", go: showFinale, current: !!finale });
     items.forEach((it) => {
       const li = document.createElement("li");
