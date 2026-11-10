@@ -360,11 +360,14 @@
   });
 
   els.retry.addEventListener("click", () => {
+    const counted = R.retryCountsAsLoss(state);
+    if (counted) losses += 1;
     startLevel(levelIndex);
+    if (counted) els.reveal.hidden = !R.canRevealMove(LEVELS[levelIndex], losses, revealed[levelIndex]);
     const first = cells.find((b) => !b.disabled);
     if (first) first.focus();
   });
-  // One more move per loss: the button hides once used and comes back on the next loss. Focus goes to Retry,
+  // One more move per loss (or mid-game Retry): the button hides once used and comes back on the next one. Focus goes to Retry,
   // the next thing to do; the moves line under the board is a live region, so the new move is read out.
   els.reveal.addEventListener("click", () => {
     revealed[levelIndex] += 1;

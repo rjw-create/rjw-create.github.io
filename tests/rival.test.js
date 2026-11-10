@@ -109,6 +109,28 @@ test("level 3's hint shows after the second loss, not before", () => {
   assert.equal(R.hintFor(level3, 3), "Hint: It chases the star nearest you. Lead it somewhere else first.");
 });
 
+test("a Retry counts as a loss once a move is made, so retries bring the hint", () => {
+  const level3 = R.LEVELS[2];
+  let losses = 0;
+  for (let n = 0; n < 3; n++) {
+    let s = R.startState(level3);
+    s = R.play(s, R.legalMoves(s.you, s.rival)[0].to).state;
+    if (R.retryCountsAsLoss(s)) losses += 1;
+  }
+  assert.equal(losses, 3);
+  assert.ok(R.hintFor(level3, losses), "three retries show the hint");
+  assert.equal(R.canRevealMove(level3, losses, 0), true, "and offer the next move");
+});
+
+test("a Retry before any move, or after the level ended, does not count", () => {
+  const level1 = R.LEVELS[0];
+  assert.equal(R.retryCountsAsLoss(R.startState(level1)), false, "before any move");
+  let s = R.startState(level1);
+  for (const dir of level1.solution) s = R.play(s, R.legalMoves(s.you, s.rival).find((m) => m.dir === dir).to).state;
+  assert.equal(R.isOver(s), true);
+  assert.equal(R.retryCountsAsLoss(s), false, "the ending already counted");
+});
+
 test("only level 3 has a text hint", () => {
   for (const [i, level] of R.LEVELS.entries()) {
     if (i === 2) continue;

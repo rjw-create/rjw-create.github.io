@@ -576,8 +576,8 @@ mark { padding: 0 var(--space-half); background: var(--color-highlight); color: 
 /* Photo strip in The build: portrait phone photos, two across on a phone, three on wide screens. */
 .photo-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); margin-top: var(--space-4); }
 
-/* Documents: one card per document, with an optional preview image. */
-.docs { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: grid; gap: var(--space-3); }
+/* Documents: one card per document. */
+.docs { list-style: none; max-width: var(--measure); margin: var(--space-3) 0 0; padding: 0; display: grid; gap: var(--space-3); }
 .document {
   display: grid;
   gap: var(--space-2);
@@ -591,71 +591,6 @@ mark { padding: 0 var(--space-half); background: var(--color-highlight); color: 
 .document-facts { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-2); margin: 0; font-family: var(--font-data); font-size: var(--text-small); color: var(--color-text-muted); }
 .document-facts dt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .document-facts dd { margin: 0; }
-.document-preview { margin: 0; }
-.document-preview img { display: block; width: 100%; height: auto; border: var(--border-width) solid var(--color-text); }
-
-/* ---------------------------------------------------------------- the nationals documentation page */
-/* The original page's markup with its classes prefixed doc-, restyled with the site's tokens. */
-.doc h3, .doc-section-title { margin: 0 0 var(--space-2); font-family: var(--font-display); font-weight: 800; font-size: var(--text-heading); line-height: var(--leading-tight); }
-.doc section { margin-top: var(--space-8); max-width: 880px; }
-.doc section h4 { margin: var(--space-4) 0 var(--space-1); font-family: var(--font-display); font-weight: 700; font-size: var(--text-subheading); }
-.doc section h5 { margin: var(--space-2) 0 var(--space-1); font-size: var(--text-body); font-weight: 500; }
-.doc section p, .doc section ul { max-width: var(--measure); margin: 0 0 var(--space-2); font-size: var(--text-read); }
-.doc section li { margin-bottom: var(--space-1); }
-.doc code { font-family: var(--font-data); font-size: var(--text-small); background: var(--color-sunken); padding: 0 var(--space-half); overflow-wrap: anywhere; }
-.doc-pill { display: block; margin-top: var(--space-1); font-family: var(--font-data); font-weight: 500; font-size: var(--text-small); color: var(--color-pen); }
-
-.doc-hero { margin-top: var(--space-4); padding: var(--space-3); background: var(--color-sunken); border-top: var(--border-width-heavy) solid var(--color-border-strong); }
-.doc-hero h2 { margin: 0 0 var(--space-1); font-family: var(--font-display); font-weight: 800; font-size: var(--text-heading); line-height: var(--leading-tight); }
-.doc-tagline { margin: 0; max-width: var(--measure); }
-.doc-hero-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); margin-top: var(--space-3); }
-.doc-val { font-family: var(--font-data); font-weight: 500; font-size: var(--text-subheading); }
-.doc-lbl { font-size: var(--text-small); color: var(--color-text-muted); }
-
-.doc-card, .doc-callout { margin: var(--space-2) 0; padding: var(--space-2); background: var(--color-sunken); border-left: var(--border-width-heavy) solid var(--color-border-strong); }
-.doc section .doc-card p, .doc section .doc-callout { font-size: var(--text-body); }
-.doc-card h5 { margin-top: 0; }
-.doc-card.doc-good, .doc-callout.doc-good { border-left-color: var(--color-success); }
-.doc-card.doc-warn, .doc-callout.doc-warn { border-left-color: var(--color-star); }
-.doc-card.doc-danger { border-left-color: var(--color-danger); }
-.doc-card.doc-info { border-left-color: var(--color-accent); }
-.doc-card.doc-purple { border-left-color: var(--color-pen); }
-
-.doc-formula { margin: var(--space-2) 0; padding: var(--space-2); overflow-x: auto; background: var(--color-surface); border: var(--border-width) solid var(--color-text); font-family: var(--font-data); text-align: center; }
-.doc-label { margin-top: var(--space-1); font-family: var(--font-body); font-size: var(--text-small); color: var(--color-text-muted); }
-
-.doc-chain { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); margin: var(--space-2) 0; }
-.doc-chain-node { padding: var(--space-1) var(--space-2); border: var(--border-width) solid var(--color-border-strong); background: var(--color-surface); font-family: var(--font-data); font-size: var(--text-small); font-weight: 500; text-align: center; }
-.doc-chain-node.doc-power { border-color: var(--color-pen); }
-.doc-chain-node.doc-highlight { border-color: var(--color-accent); }
-.doc-chain-node.doc-measure { border-color: var(--color-success); }
-.doc-sub { font-weight: 400; color: var(--color-text-muted); }
-.doc-chain-arrow { color: var(--color-text-muted); }
-
-.doc-timeline { border-left: var(--border-width) solid var(--color-border-strong); padding-left: var(--space-3); }
-.doc-tl-item { margin-bottom: var(--space-3); }
-.doc-tl-label { font-family: var(--font-data); font-size: var(--text-small); color: var(--color-pen); }
-.doc-tl-title { font-weight: 500; }
-.doc-tl-desc { max-width: var(--measure); }
-
-.doc-step { display: grid; grid-template-columns: var(--space-4) minmax(0, 1fr); gap: var(--space-2); margin-bottom: var(--space-3); }
-.doc-step-num { font-family: var(--font-data); font-weight: 500; color: var(--color-pen); }
-.doc-step-body h5 { margin-top: 0; }
-
-.doc-table-wrap { margin: var(--space-2) 0 var(--space-3); overflow-x: auto; border: var(--border-width) solid var(--color-text); }
-/* A floor on table width: on a phone a table scrolls in its box instead of squeezing each column to a word. */
-.doc table { width: 100%; min-width: calc(var(--measure) * 1.4); border-collapse: collapse; font-size: var(--text-small); }
-.doc th, .doc td { padding: var(--space-1) var(--space-2); border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
-.doc thead th { font-family: var(--font-data); font-weight: 500; color: var(--color-text-muted); white-space: nowrap; }
-/* The long text sits in the last column, or the second to last in the parts tables (Status comes last). */
-.doc td:last-child, .doc td:nth-last-child(2) { min-width: 32ch; }
-.doc-mono { font-family: var(--font-data); white-space: nowrap; }
-.doc-gain-row-highlight td { font-weight: 500; }
-.doc-tag { display: inline-block; padding: 0 var(--space-half); border: 1px solid currentColor; border-radius: var(--radius-sm); font-family: var(--font-data); font-size: var(--text-small); white-space: nowrap; }
-.doc-tag-green { color: var(--color-success); }
-.doc-tag-amber { color: var(--color-text-muted); }
-.doc-tag-red { color: var(--color-danger); }
-.doc-tag-blue { color: var(--color-accent); }
 
 /* ---------------------------------------------------------------- wide screens */
 @media (min-width: 960px) {
@@ -663,8 +598,6 @@ mark { padding: 0 var(--space-half); background: var(--color-highlight); color: 
   .strait-figs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .strait-hero { max-width: 880px; }
   .photo-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .docs { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
-  .doc-hero-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .hud {
     grid-template-columns: auto 1fr auto auto auto;
     grid-template-areas: "name level score sound read";
