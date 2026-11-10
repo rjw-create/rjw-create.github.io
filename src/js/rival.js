@@ -165,8 +165,14 @@
       level.stars.some((x) => dist(level.you, x) === near && dist(m.to, x) < near));
   }
 
-  // The hint under the board after a visitor loses a level twice in a row. Only levels with their own line
-  // have one; the others go straight to revealing moves. Null before the second loss.
+  // A Retry pressed mid-game gives up on that try, so it counts toward hints like a loss (the user,
+  // 2026-11-10). Not before the first move (nothing was tried) and not after the end (the loss already counted).
+  function retryCountsAsLoss(state) {
+    return state.turn > 0 && !isOver(state);
+  }
+
+  // The hint under the board after a visitor loses (or retries) a level twice in a row. Only levels with their
+  // own line have one; the others go straight to revealing moves. Null before the second loss.
   const HINT_AFTER_LOSSES = 2;
   function hintFor(level, losses) {
     if (losses < HINT_AFTER_LOSSES || !level.hint) return null;
@@ -217,7 +223,7 @@
       solution: ["right", "right", "right", "up", "left", "left", "left"] },
   ];
 
-  const api = { N, DIRS, RULES, LEVELS, rowOf, colOf, dist, squareName, stepTo, dirBetween, legalMoves, rivalStep, startState, play, isOver, bestMargin, futureMargin, winningMoves, reachableStates, greedyFirstMoves, rulesFitting, hintFor, canRevealMove, solutionPath };
+  const api = { N, DIRS, RULES, LEVELS, rowOf, colOf, dist, squareName, stepTo, dirBetween, legalMoves, rivalStep, startState, play, isOver, bestMargin, futureMargin, winningMoves, reachableStates, greedyFirstMoves, rulesFitting, retryCountsAsLoss, hintFor, canRevealMove, solutionPath };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.Rival = api;
 })(this);
