@@ -1,0 +1,519 @@
+/* The site is the game: a full-viewport board world with a HUD and a level path. Beating a level lays its
+   notebook entry over the board. "Read without playing" (and every no-JS visitor) gets the reading view:
+   all entries as plain pages. Tokens only (src/styles/tokens.css). Mobile first; wide layout from 960px. */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  /* HUD on top, the world fills the rest of the screen. */
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100svh;
+  background-color: var(--color-bg);
+  /* Notebook grid: two sets of thin lines, the paper's texture. */
+  background-image:
+    linear-gradient(var(--color-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+  background-size: var(--size-grid) var(--size-grid);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+a { color: var(--color-accent); text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: var(--border-width); }
+
+:focus-visible {
+  outline: var(--border-width-heavy) solid var(--color-focus);
+  outline-offset: var(--border-width);
+}
+
+[hidden] { display: none !important; }
+
+.label {
+  margin: 0;
+  font-family: var(--font-data);
+  font-size: var(--text-small);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--size-tap);
+  padding: 0 var(--space-2);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-data);
+  font-size: var(--text-small);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease);
+}
+.tool:hover { background: var(--color-sunken); }
+.tool[aria-pressed="true"] { border-color: var(--color-accent); color: var(--color-accent); }
+.tool-primary { border-color: var(--color-accent); background: var(--color-accent); color: var(--color-on-accent); font-weight: 500; }
+.tool-primary:hover { background: var(--color-accent); text-decoration: underline; }
+
+/* ---------------------------------------------------------------- HUD (always visible) */
+.hud {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "name sound" "read level" "score score";
+  align-items: center;
+  gap: var(--space-half) var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg);
+  border-bottom: var(--border-width) solid var(--color-text);
+}
+.hud-name {
+  grid-area: name;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--text-subheading);
+  line-height: var(--leading-tight);
+}
+.hud-level, .hud-score {
+  margin: 0;
+  font-family: var(--font-data);
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+}
+.hud-level { grid-area: level; justify-self: end; color: var(--color-pen); }
+.hud-score { grid-area: score; }
+.hud-score b { font-weight: 500; }
+/* On phones each tool takes its own HUD cell; on wide screens they sit together. */
+.hud-tools { display: contents; }
+#sound { grid-area: sound; justify-self: end; }
+.tool-read { grid-area: read; justify-self: start; }
+.mode-reading .hud-level,
+.mode-reading .hud-score { visibility: hidden; }
+
+/* ---------------------------------------------------------------- the game world */
+.game {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: center;
+  align-content: center;
+  padding: var(--space-2);
+}
+
+.path { width: 100%; max-width: var(--size-board); }
+.path .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.path-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-half);
+}
+.path-step {
+  display: grid;
+  width: 100%;
+  min-height: var(--size-tap);
+  padding: var(--space-half);
+  border: 0;
+  border-top: var(--border-width-heavy) solid var(--color-border-strong);
+  background: var(--color-sunken);
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.path-step:hover .path-name { text-decoration: underline; }
+.path-no { font-family: var(--font-data); font-size: var(--text-small); }
+.path-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-small);
+  line-height: var(--leading-tight);
+  hyphens: manual;
+}
+/* On phones the state word is left to the button's label and colour; wide screens show it. */
+.path-state { display: none; font-family: var(--font-data); font-size: var(--text-small); color: var(--color-text-muted); }
+.path-step[aria-current="step"] { border-top-color: var(--color-text); background: var(--color-surface); }
+.path-step[data-state="won"] { border-top-color: var(--color-accent); }
+.path-step[data-state="won"] .path-state { color: var(--color-accent); font-weight: 500; }
+
+.stage { width: 100%; display: grid; justify-items: center; }
+.board-sheet {
+  position: relative;
+  padding: var(--space-1);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-text);
+  box-shadow: var(--shadow-1);
+}
+/* Two strips of masking tape hold the board onto the desk. */
+.board-sheet::before,
+.board-sheet::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--space-2) * -0.75);
+  width: 88px;
+  height: 26px;
+  background: var(--color-tape);
+  z-index: 3;
+}
+.board-sheet::before { left: 10%; transform: rotate(-5deg); }
+.board-sheet::after { right: 10%; transform: rotate(4deg); }
+
+.board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  width: calc(var(--size-board) - var(--space-2));
+  aspect-ratio: 1;
+  border: var(--border-width) solid var(--color-border-strong);
+}
+
+.cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: inherit;
+  font: inherit;
+  cursor: default;
+}
+.cell[data-legal] { cursor: pointer; }
+.cell[data-legal]::after {
+  content: "";
+  width: 40%;
+  aspect-ratio: 1;
+  border: var(--border-width) dashed var(--color-accent);
+  border-radius: 50%;
+}
+.cell[data-legal]:hover { background: var(--color-sunken); }
+.cell:disabled { opacity: 1; }
+.cell:focus-visible { outline-offset: calc(var(--border-width-heavy) * -1); z-index: 2; }
+
+.star { width: 58%; height: 58%; }
+.star polygon { fill: var(--color-star); stroke: var(--color-star-edge); stroke-width: 6; stroke-linejoin: round; }
+
+.trail { width: 18%; aspect-ratio: 1; border-radius: 50%; background: var(--color-rival); }
+.trail-old { width: 12%; }
+
+/* Pieces sit above the grid and slide between squares. */
+.piece {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20%;
+  height: 20%;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transform: translate(calc(var(--c, 0) * 100%), calc(var(--r, 0) * 100%));
+  transition: transform var(--duration) var(--ease);
+  z-index: 1;
+}
+.piece::before { content: ""; display: block; }
+.piece-you::before { width: 46%; height: 46%; background: var(--color-text); }
+.piece-rival::before { width: 42%; height: 42%; background: var(--color-rival); transform: rotate(45deg); }
+
+/* A star pickup: the star bursts outward from the square it was taken on. */
+.burst {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20%;
+  height: 20%;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transform: translate(calc(var(--c, 0) * 100%), calc(var(--r, 0) * 100%));
+  z-index: 2;
+}
+.burst .star { animation: burst var(--duration-slow) var(--ease) forwards; }
+.burst-rival .star polygon { fill: var(--color-rival); }
+@keyframes burst {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(2.2) rotate(36deg); opacity: 0; }
+}
+
+.side { width: 100%; max-width: var(--size-board); }
+.level-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--text-heading);
+  line-height: var(--leading-tight);
+}
+.rule { margin-top: var(--space-1); }
+.rule p { margin: 0; }
+.rule-goal { font-size: var(--text-body); }
+.rule-text { font-size: var(--text-body); font-weight: 500; line-height: 1.4; }
+.rule-list { margin: var(--space-1) 0 0; padding-left: var(--space-3); }
+.rule-list li { margin-bottom: var(--space-half); }
+.rule-keys { margin-top: var(--space-1); font-size: var(--text-small); color: var(--color-text-muted); }
+
+.status {
+  min-height: calc(var(--text-body) * var(--leading-body));
+  margin: var(--space-1) 0 0;
+}
+.status-won { color: var(--color-success); font-weight: 500; }
+.hint {
+  margin: var(--space-1) 0 0;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-highlight);
+  color: var(--color-text);
+}
+.controls { display: flex; flex-wrap: wrap; gap: var(--space-1); margin-top: var(--space-1); }
+
+/* ---------------------------------------------------------------- an entry laid over the board */
+.sheet {
+  width: min(100% - var(--space-2), 880px);
+  max-height: calc(100svh - var(--space-4));
+  padding: 0;
+  border: var(--border-width) solid var(--color-text);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-1);
+}
+.sheet::backdrop { background: var(--scrim); }
+.sheet[open] { animation: sheet-in var(--duration) var(--ease); }
+@keyframes sheet-in {
+  from { transform: translateY(var(--space-3)) rotate(-1deg); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.sheet-label {
+  margin: 0;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-sunken);
+  font-family: var(--font-data);
+  font-size: var(--text-small);
+}
+.sheet .entry { margin: 0; border-top: 0; }
+.sheet-actions {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  background: var(--color-surface);
+  border-top: var(--border-width) solid var(--color-text);
+}
+
+/* ---------------------------------------------------------------- the reading view */
+/* While the game shows, the reading view stays in the page for screen readers and search, but off screen. */
+.mode-game .reading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.mode-reading .game { display: none; }
+/* Jumping to an entry keeps its title clear of the sticky HUD. */
+html { scroll-padding-top: calc(var(--space-12) + var(--space-6)); }
+
+.reading { padding-bottom: var(--space-6); }
+.reading-head { max-width: 1120px; margin: 0 auto; padding: var(--space-4) var(--space-2) var(--space-3); }
+.reading-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--text-hero);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+}
+.reading-intro { max-width: var(--measure); margin: var(--space-1) 0 var(--space-2); font-size: var(--text-subheading); }
+
+/* Notebook entries */
+.entry {
+  position: relative;
+  margin: 0 var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-2) var(--space-4) var(--space-4);
+  background: var(--color-surface);
+  border-top: var(--border-width-heavy) solid var(--color-text);
+}
+/* The notebook's red margin line. */
+.entry::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--space-2);
+  width: var(--border-width);
+  background: var(--color-margin-rule);
+}
+.entry-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-2);
+  margin: 0;
+  font-family: var(--font-data);
+  font-size: var(--text-small);
+  color: var(--color-pen);
+}
+.entry-title {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--text-display);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+}
+.entry-body { margin-top: var(--space-3); }
+
+.prose { max-width: var(--measure); font-size: var(--text-read); }
+.prose p { margin: 0 0 var(--space-2); }
+
+.placeholder {
+  margin: 0;
+  padding: var(--space-2);
+  border: var(--border-width) dashed var(--color-border-strong);
+  font-family: var(--font-data);
+  font-size: var(--text-body);
+}
+.draft-label {
+  margin: var(--space-3) 0 var(--space-1);
+  font-family: var(--font-data);
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
+}
+mark { padding: 0 var(--space-half); background: var(--color-highlight); color: var(--color-text); }
+
+/* C's counts strip, pasted in like a printout. */
+.counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2);
+  border: var(--border-width) solid var(--color-text);
+  background: var(--color-surface);
+  font-family: var(--font-data);
+}
+.counts div { display: flex; flex-direction: column-reverse; }
+.counts dt { font-size: var(--text-small); color: var(--color-text-muted); }
+.counts dd {
+  margin: 0;
+  font-size: var(--text-title);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+.margin-note { max-width: 32ch; margin: 0 0 var(--space-3); font-style: italic; color: var(--color-pen); }
+
+/* Taped-in media slots. */
+.media { display: grid; gap: var(--space-4); margin-top: var(--space-3); }
+.slot { position: relative; margin: 0; }
+.slot:nth-child(odd) { transform: rotate(-0.6deg); }
+.slot:nth-child(even) { transform: rotate(0.8deg); }
+.slot::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--space-2) * -0.75);
+  left: 40%;
+  width: 88px;
+  height: 26px;
+  background: var(--color-tape);
+  transform: rotate(-3deg);
+  z-index: 1;
+}
+.slot-frame {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  padding: var(--space-2);
+  border: var(--border-width) dashed var(--color-text);
+  background: var(--color-sunken);
+  box-shadow: var(--shadow-1);
+  font-family: var(--font-data);
+  font-size: var(--text-small);
+  text-align: center;
+}
+.slot video,
+.slot img { display: block; width: 100%; height: auto; border: var(--border-width) solid var(--color-text); box-shadow: var(--shadow-1); }
+.slot figcaption { margin-top: var(--space-1); font-style: italic; font-size: var(--text-small); color: var(--color-text-muted); }
+
+.side-pages { margin-top: var(--space-4); max-width: var(--measure); }
+.ledger { margin: var(--space-1) 0 0; }
+.ledger div {
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
+  border-top: 1px solid var(--color-border-strong);
+}
+.ledger dt { font-family: var(--font-data); font-size: var(--text-small); color: var(--color-pen); padding-top: var(--space-half); }
+.ledger dd { margin: 0; }
+.when { font-family: var(--font-data); font-size: var(--text-small); color: var(--color-text-muted); white-space: nowrap; }
+
+.contact-links { list-style: none; margin: var(--space-2) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0 var(--space-4); }
+.contact-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--size-tap);
+  font-family: var(--font-data);
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------- wide screens */
+@media (min-width: 960px) {
+  .hud {
+    grid-template-columns: auto 1fr auto auto auto;
+    grid-template-areas: "name level score sound read";
+    gap: var(--space-2) var(--space-3);
+    padding: var(--space-2) var(--space-6);
+  }
+  .hud-level { justify-self: center; }
+  .game {
+    grid-template-columns: minmax(180px, 1fr) auto minmax(260px, 1fr);
+    align-items: center;
+    column-gap: var(--space-6);
+    padding: var(--space-3) var(--space-6);
+  }
+  .path-state { display: block; }
+  html { scroll-padding-top: var(--space-12); }
+  .level-title { font-size: var(--text-title); }
+  .rule-text { font-size: var(--text-subheading); line-height: 1.35; }
+  .status { min-height: calc(var(--text-body) * var(--leading-body) * 3); margin-top: var(--space-2); }
+  .path { justify-self: end; max-width: 15rem; }
+  .path-list { grid-template-columns: 1fr; gap: var(--space-1); }
+  .path-step { grid-template-columns: auto 1fr; grid-template-areas: "no name" "no state"; column-gap: var(--space-2); padding: var(--space-1) var(--space-2); }
+  .path-no { grid-area: no; align-self: center; }
+  .path-name { grid-area: name; font-size: var(--text-subheading); }
+  .path-state { grid-area: state; }
+  .side { justify-self: start; max-width: 22rem; }
+  .entry {
+    max-width: 1120px;
+    margin: 0 auto var(--space-6);
+    padding: var(--space-6) var(--space-6) var(--space-6) var(--space-12);
+  }
+  .entry::before { left: var(--space-8); }
+  .entry-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--space-6); align-items: start; }
+  .entry-body > .media { grid-column: 2; grid-row: 1 / span 4; margin-top: 0; }
+  .entry-body > :not(.media) { grid-column: 1; }
+  #story .entry-body { display: block; }
+  .sheet .entry { padding: var(--space-4) var(--space-4) var(--space-4) var(--space-8); }
+  .sheet .entry::before { left: var(--space-4); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .burst .star, .sheet[open] { animation: none; }
+}

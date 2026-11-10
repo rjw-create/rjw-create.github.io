@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jackson Raines: read the rival</title>
+<meta name="description" content="Jackson Raines, founder of Pathways. Beat four short boards to open his story and work, or read every entry without playing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap">
+<link rel="stylesheet" href="src/styles/tokens.css">
+<link rel="stylesheet" href="src/styles/site.css">
+<script>document.documentElement.classList.add("js", "mode-game");</script>
+</head>
+<body>
+
+<header class="hud">
+  <p class="hud-name">Jackson Raines</p>
+  <p class="hud-level" id="hud-level" hidden></p>
+  <p class="hud-score" id="hud-score" hidden></p>
+  <div class="hud-tools">
+    <button class="tool" type="button" id="sound" aria-pressed="false" hidden>Sound: off</button>
+    <button class="tool tool-read" type="button" id="read-toggle" hidden>Read without playing</button>
+  </div>
+</header>
+
+<main class="game" id="game" hidden>
+  <nav class="path" aria-label="Levels">
+    <h2 class="label">Levels</h2>
+    <ol class="path-list" id="path-list"></ol>
+  </nav>
+
+  <div class="stage">
+    <div class="board-sheet">
+      <div class="board" id="board" role="group" aria-label="Board, 5 by 5" aria-describedby="rule"></div>
+    </div>
+  </div>
+
+  <div class="side">
+    <h2 class="level-title" id="level-title"></h2>
+    <div class="rule" id="rule"></div>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+    <p class="hint" id="hint" hidden></p>
+    <div class="controls">
+      <button class="tool" type="button" id="retry">Retry level</button>
+      <button class="tool" type="button" id="skip">Skip level</button>
+    </div>
+  </div>
+</main>
+
+<dialog class="sheet" id="sheet" aria-labelledby="sheet-label">
+  <p class="sheet-label" id="sheet-label"></p>
+  <div class="sheet-page" id="sheet-page"></div>
+  <div class="sheet-actions">
+    <button class="tool tool-primary" type="button" id="sheet-next"></button>
+    <button class="tool" type="button" id="sheet-back">Back to the board</button>
+  </div>
+</dialog>
+
+<div class="reading" id="reading">
+  <header class="reading-head">
+    <h1 class="reading-title">Jackson Raines</h1>
+    <p class="reading-intro">Founder of Pathways. These are the entries the game opens, one per level, as plain pages.</p>
+    <button class="tool" type="button" id="back-to-game" hidden>Back to the game</button>
+  </header>
+
+  <article class="entry" id="story" aria-labelledby="story-title">
+    <header class="entry-head">
+      <p class="entry-meta"><span>Level 1</span><span>Entry 01</span><span>the one about aiming</span></p>
+      <h2 class="entry-title" id="story-title">Aimed at something</h2>
+    </header>
+    <div class="entry-body">
+      <p class="placeholder">[Your story, in your words]</p>
+      <p class="draft-label"><mark>draft</mark> to rewrite in your own voice</p>
+      <div class="prose">
+        <p>I have always obsessed over things: rock climbing, basketball, academics, modelling, and now this company.</p>
+        <p>Aimed at nothing, the obsession went into my phone. Aimed at something I care about, I am unstoppable.</p>
+        <p>Pathways exists to give people something worth aiming at.</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="entry" id="pathways" aria-labelledby="pathways-title">
+    <header class="entry-head">
+      <p class="entry-meta"><span>Level 2</span><span>Founder</span><span>Oct 2026 to now</span></p>
+      <h2 class="entry-title" id="pathways-title">Pathways</h2>
+    </header>
+    <div class="entry-body">
+      <dl class="counts" aria-label="Pathways in numbers">
+        <div><dt>commits</dt><dd>500</dd></div>
+        <div><dt>merged pull requests</dt><dd>89</dd></div>
+        <div><dt>to a working site</dt><dd>&lt;3 weeks</dd></div>
+      </dl>
+      <div class="prose">
+        <p>A company changing the way people think, learn and create through games, classroom tools and things you actually make.</p>
+        <p>I shipped a working learning site in under three weeks: daily and weekly puzzles, the original strategy game Read the Rival, and a live classroom mode with join codes and a projector view.</p>
+        <p><strong>Next:</strong> a classroom tool, school controls and a catalog of deeper games where you make things, starting with the detective game The Bureau.</p>
+      </div>
+      <p class="margin-note">The game on this site uses Read the Rival's rules.</p>
+      <div class="media">
+        <figure class="slot"><div class="slot-frame">[screen recording: Pathways classroom mode]</div><figcaption>Classroom mode: join codes and the projector view.</figcaption></figure>
+        <figure class="slot"><div class="slot-frame">[screen recording: Read the Rival]</div><figcaption>Read the Rival.</figcaption></figure>
+      </div>
+    </div>
+  </article>
+
+  <article class="entry" id="mission-board" aria-labelledby="mb-title">
+    <header class="entry-head">
+      <p class="entry-meta"><span>Level 3</span><span>Creator</span><span>Nov 2026 to now</span></p>
+      <h2 class="entry-title" id="mb-title">Mission Board</h2>
+    </header>
+    <div class="entry-body">
+      <dl class="counts" aria-label="Mission Board in numbers">
+        <div><dt>merged pull requests</dt><dd>75+</dd></div>
+        <div><dt>AI orchestrators</dt><dd>3</dd></div>
+      </dl>
+      <div class="prose">
+        <p>A multi-agent system: three AI orchestrators plan work, run parallel coding agents and review pull requests, and nothing merges until I approve it.</p>
+        <p>Alongside it, a token-efficiency lab.</p>
+      </div>
+      <div class="media">
+        <figure class="slot"><div class="slot-frame">[screen recording: Mission Board]</div><figcaption>The Mission Board.</figcaption></figure>
+      </div>
+    </div>
+  </article>
+
+  <article class="entry" id="strait" aria-labelledby="strait-title">
+    <header class="entry-head">
+      <p class="entry-meta"><span>Level 4</span><span>Engineering design team lead</span></p>
+      <h2 class="entry-title" id="strait-title">STRAIT</h2>
+    </header>
+    <div class="entry-body">
+      <div class="prose">
+        <p>A portable ground-imaging instrument: electrical resistivity tomography plus FMCW radar. I led the engineering design team. We won the state TSA Engineering Design title, a first for my school.</p>
+      </div>
+      <div class="media">
+        <figure class="slot"><div class="slot-frame">[screenshot: STRAIT]</div><figcaption>STRAIT.</figcaption></figure>
+      </div>
+      <section class="side-pages" aria-labelledby="more-title">
+        <h3 class="label" id="more-title">Side pages</h3>
+        <dl class="ledger">
+          <div><dt>Research</dt><dd>University of Kentucky lab fellowship: cDNA libraries <span class="when">2026</span></dd></div>
+          <div><dt>Research</dt><dd>Formal proof of an AI scheduler's scoring function, NexEdge Labs <span class="when">2026</span></dd></div>
+          <div><dt>School</dt><dd>University of Kentucky, B.S. Chemical Engineering <span class="when">2026 to now</span></dd></div>
+          <div><dt>Also</dt><dd>Trumpet: 3x All-State, invited jazz performer</dd></div>
+        </dl>
+      </section>
+    </div>
+  </article>
+
+  <section class="entry entry-contact" id="contact" aria-labelledby="contact-title">
+    <header class="entry-head">
+      <p class="entry-meta"><span>Finale</span><span>Contact</span></p>
+      <h2 class="entry-title" id="contact-title">Write to me</h2>
+    </header>
+    <ul class="contact-links">
+      <li><a href="mailto:jwra230@uky.edu">jwra230@uky.edu</a></li>
+      <li><a href="https://linkedin.com/in/jackson-raines">linkedin.com/in/jackson-raines</a></li>
+      <li><a href="https://github.com/rjw-create">github.com/rjw-create</a></li>
+    </ul>
+  </section>
+</div>
+
+<script src="src/js/rival.js"></script>
+<script src="src/js/site.js"></script>
+</body>
+</html>

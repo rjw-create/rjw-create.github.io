@@ -2,36 +2,49 @@
    DESIGN.md explains when to use each one. Components use var(--token) only; scripts/check.sh
    fails on raw colours anywhere outside this file and checks the contrast pairs DESIGN.md lists.
    Tokens are named by role (--color-text-muted), not by value (--grey-600), so a theme change
-   is an edit here and nowhere else. */
+   is an edit here and nowhere else.
+   Look: a field notebook on a desk. Paper and ink by day; the same notebook under a lamp at night. */
 :root {
   color-scheme: light dark;
 
   /* Colour: light theme */
-  --color-bg: #fafaf7;            /* page background */
-  --color-surface: #ffffff;       /* cards, inputs, menus */
-  --color-text: #1a1a1a;          /* body text */
-  --color-text-muted: #5c5c58;    /* secondary text, captions */
-  --color-border: #e4e4df;        /* decorative dividers (no contrast target) */
-  --color-border-strong: #8a8a84; /* input and control outlines (3:1) */
-  --color-accent: #2759c7;        /* primary buttons, links */
+  --color-bg: #f1ecdf;            /* the desk: page background */
+  --color-surface: #fbf8f0;       /* notebook pages, the board */
+  --color-sunken: #e6dfcd;        /* taped-in media slots, contents rows, sealed bands */
+  --color-text: #1b1f27;          /* ink: body text, your piece */
+  --color-text-muted: #575247;    /* pencil: secondary text, captions */
+  --color-border: #ddd4bf;        /* decorative dividers (no contrast target) */
+  --color-border-strong: #7a7364; /* board lines, control outlines (3:1) */
+  --color-accent: #1e6b52;        /* green ink: links, the one primary action */
   --color-on-accent: #ffffff;     /* text on an accent fill */
-  --color-danger: #b4380a;        /* errors, destructive actions */
+  --color-danger: #b5301a;        /* errors */
   --color-success: #13733a;       /* confirmations */
-  --color-focus: #2759c7;         /* focus ring */
+  --color-focus: #1e6b52;         /* focus ring */
+  --color-pen: #a62b17;           /* red pen: margin notes, dated entry lines */
+  --color-rival: #b5301a;         /* the rival's piece and trail (3:1 as a UI part) */
+  --color-star: #e2b23c;          /* star fill (decorative; the edge carries the contrast) */
+  --color-star-edge: #1b1f27;     /* a star's outline on the board (3:1) */
+  --color-tape: #e3cd85;          /* masking tape on taped-in media (decorative) */
+  --color-grid: #e7e0cf;          /* notebook grid lines (decorative) */
+  --color-margin-rule: #e4b5a8;   /* the notebook's red margin line (decorative) */
+  --color-highlight: #f0d86e;     /* highlighter behind "draft" labels */
 
-  /* Type: three families, one job each. These system stacks are placeholders: choose fonts
-     that fit the project's personality in DESIGN.md rather than a habitual default. */
-  --font-display: Georgia, "Times New Roman", serif;          /* headings */
-  --font-body: ui-sans-serif, system-ui, sans-serif;          /* everything else */
-  --font-data: ui-monospace, Consolas, "Courier New", monospace; /* numbers, code, tables */
+  /* Type: three families, one job each. Bricolage Grotesque for loud headings, Newsreader for reading
+     (it is a text face, warm on paper), IBM Plex Mono for labels, dates and counts. */
+  --font-display: "Bricolage Grotesque", "Arial Narrow", sans-serif; /* headings */
+  --font-body: "Newsreader", Georgia, serif;                        /* everything else */
+  --font-data: "IBM Plex Mono", ui-monospace, Consolas, monospace;  /* numbers, labels, dates */
+  --text-hero: clamp(2.75rem, 5vw + 1.25rem, 5.5rem); /* 44-88px: "Make a move." only */
   --text-display: 2.5rem;  /* 40px: one per page at most */
-  --text-title: 2rem;      /* 32px: page title */
+  --text-title: 2rem;      /* 32px: entry titles */
   --text-heading: 1.5rem;  /* 24px: section heading */
   --text-subheading: 1.25rem; /* 20px */
+  --text-read: 1.1875rem;  /* 19px: long-form reading in the notebook */
   --text-body: 1rem;       /* 16px */
   --text-small: 0.875rem;  /* 14px: the floor, nothing smaller */
-  --leading-tight: 1.2;    /* headings */
-  --leading-body: 1.5;     /* paragraphs */
+  --leading-tight: 1.05;   /* display headings */
+  --leading-body: 1.55;    /* paragraphs */
+  --measure: 62ch;         /* longest comfortable line of reading text */
 
   /* Space: 8px scale (--space-N = N x 8px); --space-half is for tight icon gaps only */
   --space-half: 4px;
@@ -41,37 +54,56 @@
   --space-4: 32px;
   --space-6: 48px;
   --space-8: 64px;
+  --space-12: 96px;        /* between notebook entries on wide screens */
+
+  /* Size */
+  --size-tap: 44px;                     /* smallest touch target */
+  --size-board: min(86vw, 58svh, 560px); /* the board: as large as the screen allows */
+  --size-grid: 24px;                    /* notebook grid pitch */
 
   /* Shape */
-  --radius-sm: 4px;   /* chips, tags */
-  --radius: 8px;      /* buttons, inputs, cards */
-  --radius-lg: 16px;  /* dialogs, large panels */
+  --radius-sm: 2px;   /* chips, tags: paper has hard edges */
+  --radius: 4px;      /* buttons, inputs */
+  --radius-lg: 8px;   /* large panels */
+  --border-width: 2px;
+  --border-width-heavy: 3px;
 
-  /* Elevation: use sparingly; most surfaces are flat with a border */
-  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.08);   /* raised: cards on hover */
-  --shadow-2: 0 8px 24px rgb(0 0 0 / 0.12);  /* overlay: menus, dialogs */
+  /* Elevation: flat paper; one hard offset shadow for taped-in items */
+  --shadow-1: 3px 3px 0 var(--color-border-strong);   /* taped-in media, the board */
+  --shadow-2: 0 8px 24px rgb(0 0 0 / 0.12);           /* overlays */
+  --scrim: rgb(23 21 15 / 0.55);                      /* behind an entry page laid over the board */
 
   /* Motion */
   --duration-fast: 120ms; /* hovers, toggles */
-  --duration: 200ms;      /* panels, menus */
+  --duration: 220ms;      /* a piece's step, a page opening */
+  --duration-slow: 480ms; /* a star pickup burst */
   --ease: cubic-bezier(0.2, 0, 0, 1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #121212;
-    --color-surface: #1c1c1c;
-    --color-text: #f2f2ee;
-    --color-text-muted: #a8a8a3;
-    --color-border: #2e2e2c;
-    --color-border-strong: #7a7a74;
-    --color-accent: #7aa2ff;
-    --color-on-accent: #0b0b0b;
-    --color-danger: #ff8a5c;
+    --color-bg: #17150f;
+    --color-surface: #211e17;
+    --color-sunken: #2c281f;
+    --color-text: #efe9db;
+    --color-text-muted: #ada593;
+    --color-border: #3a342a;
+    --color-border-strong: #8a8170;
+    --color-accent: #7fc8a6;
+    --color-on-accent: #10140f;
+    --color-danger: #ff7a5c;
     --color-success: #4cc77a;
-    --color-focus: #7aa2ff;
-    --shadow-1: 0 1px 2px rgb(0 0 0 / 0.5);
+    --color-focus: #7fc8a6;
+    --color-pen: #ff9479;
+    --color-rival: #ff7a5c;
+    --color-star: #e8c04e;
+    --color-star-edge: #e8c04e;
+    --color-tape: #6e5e2e;
+    --color-grid: #26231b;
+    --color-margin-rule: #5a2f26;
+    --color-highlight: #6b5a1c;
     --shadow-2: 0 8px 24px rgb(0 0 0 / 0.6);
+    --scrim: rgb(0 0 0 / 0.7);
   }
 }
 
@@ -80,5 +112,6 @@
   :root {
     --duration-fast: 0ms;
     --duration: 0ms;
+    --duration-slow: 0ms;
   }
 }
