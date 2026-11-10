@@ -1,19 +1,23 @@
 # rjw-create.github.io
 
-Jackson Raines's personal site: a field notebook with a playable board as its front door. Each move on the
-board opens the next notebook entry (story, Pathways, Mission Board, STRAIT and the rest). "Skip to the story"
-and every contents row open entries without playing, and all the text is plain HTML in `index.html`.
+Jackson Raines's personal site, built as a game: four short Read the Rival boards, one per notebook entry
+(story, Pathways, Mission Board, STRAIT and the rest), then a Contact finale. Beating a level lays its entry
+over the board. "Read without playing", Skip level and the level path reach every entry without winning, and
+all the text is plain HTML in `index.html` (the reading view, which is also what no-JS visitors see).
 
 Plain HTML, CSS and JavaScript, no build step. GitHub Pages serves `main` from the repository root.
 
 ## Files
 | Path | What it is |
 | --- | --- |
-| `index.html` | The whole page: board, contents and every entry |
+| `index.html` | The HUD, the game world, the entry sheet and the reading view with every entry |
 | `src/styles/tokens.css` | Design tokens (colour, type, space, motion); see `DESIGN.md` |
 | `src/styles/site.css` | Layout and components, tokens only |
-| `src/js/rival.js` | The board's rules and puzzles, no DOM (tested in `tests/rival.test.js`) |
-| `src/js/site.js` | Draws the board, plays turns, opens entries, optional sound |
+| `src/js/rival.js` | The rules (A, B, C) and the four levels, no DOM (tested in `tests/rival.test.js`) |
+| `src/js/site.js` | Levels, board, level path, entry sheet, reading view, optional sound |
+
+Links: `#level-1` to `#level-4` open a level; `#story`, `#pathways`, `#mission-board`, `#strait` and
+`#contact` open the reading view at that entry.
 | `assets/media/` | Screen recordings and screenshots (see below) |
 
 ## Adding the screen recordings and screenshots

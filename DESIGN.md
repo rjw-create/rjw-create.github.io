@@ -21,8 +21,9 @@ Approved wireframes are what `verify-app` compares the built page against. Add a
 
 ## Personality
 Three words, and what each means in practice.
-- **Playable**: the front door is a board you play (Read the Rival's rule A); each move opens the next
-  entry. Nothing is ever locked: Skip and every contents row open pages without playing.
+- **Playable**: the game is the site. Four levels of Read the Rival, one per entry, then a Contact finale;
+  beating a level lays its entry over the board. Nothing is ever locked: Skip level, the level path and
+  "Read without playing" reach every entry without winning.
 - **Handmade**: a field notebook on a desk. Grid paper, a red margin line, dated entries, taped-in media
   with a hard offset shadow, red-pen notes. No rounded cards, no gradients of colour.
 - **Exact**: counts are real and come from the brief (500 commits, 89 and 75+ merged pull requests), set
@@ -75,7 +76,7 @@ checked in both themes. Add a row whenever text or a control sits on a new backg
 | `--color-border-strong` | `--color-surface` | 3 | Board lines, control outlines |
 | `--color-focus` | `--color-bg` | 3 | Focus ring |
 | `--color-focus` | `--color-surface` | 3 | Focus ring on the board and pages |
-| `--color-text` | `--color-sunken` | 4.5 | Contents rows, media slot labels |
+| `--color-text` | `--color-sunken` | 4.5 | Level path steps, media slot labels |
 | `--color-text-muted` | `--color-sunken` | 4.5 | Captions in media slots |
 | `--color-accent` | `--color-surface` | 4.5 | Links on notebook pages |
 | `--color-accent` | `--color-sunken` | 4.5 | Links in contents rows |
@@ -112,13 +113,15 @@ To measure a colour before it becomes a token:
   `--space-6` 48, `--space-8` 64. `--space-half` (4px) only for tight icon gaps.
   A raw px/rem/em in `margin`, `padding`, `gap` or `font-size` fails the check.
   `--space-12` 96px between notebook entries on wide screens.
-- **Size:** `--size-tap` 44px (smallest target), `--size-cell` 52-76px (a board square), `--size-sealed`
-  (how much of a sealed page shows), `--size-grid` 24px (notebook grid pitch).
+- **Size:** `--size-tap` 44px (smallest target), `--size-board` min(86vw, 58svh, 560px) (the board, as
+  large as the screen allows), `--size-grid` 24px (notebook grid pitch).
 - **Radius:** paper has hard edges. `--radius-sm` 2px, `--radius` 4px, `--radius-lg` 8px.
 - **Elevation:** flat paper. `--shadow-1` is a hard 3px offset for taped-in media and the board;
   `--shadow-2` for overlays. Nothing else gets a shadow.
-- **Motion:** `--duration-fast` 120ms (hover, toggle), `--duration` 220ms (a piece's step, a page
-  opening), `--ease`. With `prefers-reduced-motion: reduce` both become 0ms, so animate with the tokens.
+- **Motion:** `--duration-fast` 120ms (hover, toggle), `--duration` 220ms (a piece's step, an entry
+  sliding over the board), `--duration-slow` 480ms (a star pickup burst), `--ease`. With
+  `prefers-reduced-motion: reduce` all three become 0ms and the burst is not drawn.
+- **Scrim:** `--scrim` darkens the board behind an entry page (translucent, so no contrast pair).
 - **Sound:** off until the visitor turns it on (the Sound button). Short tones for your step, the
   rival's step, a star, and the end of a board; nothing plays on its own.
 
@@ -132,10 +135,12 @@ Build from this list before inventing something new. Add a row when a component 
 
 | Component | Variants | States | Snippet | File |
 | --- | --- | --- | --- | --- |
-| Tool button | default, pressed (Sound) | default, hover, focus | `<button class="tool" type="button">Another board</button>` | src/styles/site.css |
-| Board | 5 by 5, taped-in sheet | legal square (dashed ring), star, trail, game over | `<div class="board" role="group">` (cells built by src/js/site.js) | src/styles/site.css |
-| Contents row | sealed, open | default, hover, focus | `<a class="track" href="#story">...</a>` | src/styles/site.css |
-| Notebook entry | sealed, open | sealed shows its top and an Open button | `<article class="entry" data-track="1">` | src/styles/site.css |
+| Tool button | default, primary (Next level), pressed (Sound) | default, hover, focus | `<button class="tool" type="button">Retry level</button>` | src/styles/site.css |
+| HUD | phone (3 rows), wide (1 row) | sticky, always visible | `<header class="hud">` | src/styles/site.css |
+| Board | 5 by 5, taped-in sheet | legal square (dashed ring), star, trail (last two steps), star burst | `<div class="board" role="group">` (cells built by src/js/site.js) | src/styles/site.css |
+| Level path | 5 steps across (phone), list (wide) | playing, won, skipped, finale | `<button class="path-step" aria-current="step">` | src/styles/site.css |
+| Entry sheet | level won, level skipped, finale | open over a scrim | `<dialog class="sheet">` | src/styles/site.css |
+| Notebook entry | in the reading view, or borrowed by the sheet | static | `<article class="entry" id="story">` | src/styles/site.css |
 | Counts strip | 2-3 counts | static | `<dl class="counts">` | src/styles/site.css |
 | Media slot | wide, normal | placeholder, filled (video or img) | `<figure class="slot">` | src/styles/site.css |
 
@@ -160,7 +165,7 @@ One row per approved UI choice; the full record (context, options, decision, con
 
 | Date | Decision | Options (artifact) | Chosen, and what was merged in | Record |
 | --- | --- | --- | --- | --- |
-| 2026-11-09 | Homepage direction | A Field notebook, B Playable front door, C Instrument readout, D Liner notes | B, with A's notebook texture, C's counts strip and D's track list as contents; immersive | docs/decisions/2026-11-09-homepage-direction.md |
+| 2026-11-09 | Homepage direction | A Field notebook, B Playable front door, C Instrument readout, D Liner notes | B as the whole site (levels = entries, after Jackson's "centered around the game" feedback), with A's notebook texture, C's counts strip and D's track list as the level path | docs/decisions/2026-11-09-homepage-direction.md |
 
 ## Avoid
 Models drift to the same generic look when left to default. Name what this project avoids.

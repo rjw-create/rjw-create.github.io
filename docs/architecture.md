@@ -4,31 +4,36 @@
 > Update it when the shape of the system changes, not for every feature.
 
 ## What this is
-Jackson Raines's personal site: one static page served by GitHub Pages from `main`. A small board (Read the
-Rival's rule A) is the front door; each move opens the next notebook entry. All content is plain HTML.
+Jackson Raines's personal site: one static page served by GitHub Pages from `main`. The site is a game: four
+Read the Rival levels, one per notebook entry, then a Contact finale. All content is plain HTML.
 
 ## Main pieces
 | Part | Where | Responsibility |
 | --- | --- | --- |
-| Page | `index.html` | All content, contents list, board container |
-| Game rules | `src/js/rival.js` | Pure rules and puzzles; works in the browser (`window.Rival`) and in Node tests |
-| Front door | `src/js/site.js` | Board drawing, input (tap, click, arrow keys), opening entries, opt-in sound |
+| Page | `index.html` | HUD, game world, entry sheet (`<dialog>`), reading view with every entry |
+| Game rules | `src/js/rival.js` | Pure rules (A, B, C) and the four levels; works in the browser (`window.Rival`) and in Node tests |
+| Game | `src/js/site.js` | Levels, board drawing, input (tap, click, arrow keys), path, sheet, reading view, opt-in sound |
 | Styles | `src/styles/tokens.css`, `src/styles/site.css` | Tokens, then layout and components (tokens only) |
 
 ## How a visit flows
-1. Without JavaScript, every entry is open and the board says it needs JavaScript.
-2. With JavaScript, `html.js` seals entries 01-04 (their top shows; the text stays in the page).
-3. Each move opens the next entry; Skip, a contents row, an entry's Open button or a `#hash` opens entries directly.
+1. Without JavaScript, the game stays hidden and the reading view is the page.
+2. With JavaScript, `html.mode-game` shows the game; the reading view stays in the page off screen (screen
+   readers and search read it), with its links out of the Tab order.
+3. Winning (or skipping) a level moves that entry's element into the sheet; closing the sheet puts it back.
+   Each entry exists once in the page.
+4. "Read without playing" switches to `html.mode-reading`: the game hides and the reading view shows.
+5. `#level-N` opens a level; an entry id (`#pathways`) opens the reading view there.
 
 ## External services
 - Google Fonts: Bricolage Grotesque, Newsreader, IBM Plex Mono (stylesheet link in `index.html`).
 
 ## Rules of the road
-- `rival.js` never touches the DOM; `tests/rival.test.js` proves every shipped puzzle has exactly one
-  winning first move that is not the step toward your nearest star.
-- Never hide text from readers: sealing is visual only (no `display: none`, no `aria-hidden` on content).
+- `rival.js` never touches the DOM. `tests/rival.test.js` proves every level can be won, levels 2-4 have
+  exactly one winning first move that is not the step toward your nearest star, and level 4's trail fits
+  only its hidden rule. Change a level only with the test passing.
+- Never hide entry text from readers: no `display: none` or `aria-hidden` on the reading view in game mode.
 - No build step and no dependencies beyond the UI check's Playwright.
 
 ## Known weak spots
-- Sealed entries clip with `max-height`; very long entries still open fully, but the sealed preview height
-  is one token (`--size-sealed`).
+- The `<dialog>` close event arrives after Next has opened the next sheet; the close handler checks
+  `sheet.open` first. Keep that check if the sheet flow changes.

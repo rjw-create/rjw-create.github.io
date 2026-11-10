@@ -1,7 +1,9 @@
 {
   "serve": ".",
   "pages": [
-    { "name": "home", "path": "/" }
+    { "name": "home", "path": "/" },
+    { "name": "level-4-hidden-rule", "path": "/#level-4" },
+    { "name": "reading-view", "path": "/#story" }
   ],
   "widths_px": [375, 1280],
   "ignore": ["/favicon\\.ico$"]

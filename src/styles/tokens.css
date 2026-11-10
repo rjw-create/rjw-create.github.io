@@ -58,8 +58,7 @@
 
   /* Size */
   --size-tap: 44px;                     /* smallest touch target */
-  --size-cell: clamp(52px, 16vw, 76px); /* one board square */
-  --size-sealed: 9rem;                  /* how much of a sealed page shows before it is opened */
+  --size-board: min(86vw, 58svh, 560px); /* the board: as large as the screen allows */
   --size-grid: 24px;                    /* notebook grid pitch */
 
   /* Shape */
@@ -72,10 +71,12 @@
   /* Elevation: flat paper; one hard offset shadow for taped-in items */
   --shadow-1: 3px 3px 0 var(--color-border-strong);   /* taped-in media, the board */
   --shadow-2: 0 8px 24px rgb(0 0 0 / 0.12);           /* overlays */
+  --scrim: rgb(23 21 15 / 0.55);                      /* behind an entry page laid over the board */
 
   /* Motion */
   --duration-fast: 120ms; /* hovers, toggles */
   --duration: 220ms;      /* a piece's step, a page opening */
+  --duration-slow: 480ms; /* a star pickup burst */
   --ease: cubic-bezier(0.2, 0, 0, 1);
 }
 
@@ -102,6 +103,7 @@
     --color-margin-rule: #5a2f26;
     --color-highlight: #6b5a1c;
     --shadow-2: 0 8px 24px rgb(0 0 0 / 0.6);
+    --scrim: rgb(0 0 0 / 0.7);
   }
 }
 
@@ -110,5 +112,6 @@
   :root {
     --duration-fast: 0ms;
     --duration: 0ms;
+    --duration-slow: 0ms;
   }
 }

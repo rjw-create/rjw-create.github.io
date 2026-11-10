@@ -8,7 +8,7 @@
     375,
     1280
   ],
-  "base": "http://127.0.0.1:39177",
+  "base": "http://127.0.0.1:26194",
   "contrast": {
     "status": "pass",
     "cmd": "node scripts/design-check.mjs",
@@ -24,6 +24,28 @@
         "docs/evidence/2026-11-09-feature-immersive-site/home-1280px-light.png",
         "docs/evidence/2026-11-09-feature-immersive-site/home-375px-dark.png",
         "docs/evidence/2026-11-09-feature-immersive-site/home-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "level-4-hidden-rule",
+      "path": "/#level-4",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-09-feature-immersive-site/level-4-hidden-rule-375px-light.png",
+        "docs/evidence/2026-11-09-feature-immersive-site/level-4-hidden-rule-1280px-light.png",
+        "docs/evidence/2026-11-09-feature-immersive-site/level-4-hidden-rule-375px-dark.png",
+        "docs/evidence/2026-11-09-feature-immersive-site/level-4-hidden-rule-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "reading-view",
+      "path": "/#story",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-09-feature-immersive-site/reading-view-375px-light.png",
+        "docs/evidence/2026-11-09-feature-immersive-site/reading-view-1280px-light.png",
+        "docs/evidence/2026-11-09-feature-immersive-site/reading-view-375px-dark.png",
+        "docs/evidence/2026-11-09-feature-immersive-site/reading-view-1280px-dark.png"
       ]
     }
   ]
