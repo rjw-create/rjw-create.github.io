@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-09",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "widths_px": [
+    375,
+    1280
+  ],
+  "base": "http://127.0.0.1:39177",
+  "contrast": {
+    "status": "pass",
+    "cmd": "node scripts/design-check.mjs",
+    "tail": "Contrast (WCAG 2.2, colours from src/styles/tokens.css) | DESIGN CHECK PASSED"
+  },
+  "pages": [
+    {
+      "name": "home",
+      "path": "/",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-09-feature-immersive-site/home-375px-light.png",
+        "docs/evidence/2026-11-09-feature-immersive-site/home-1280px-light.png",
+        "docs/evidence/2026-11-09-feature-immersive-site/home-375px-dark.png",
+        "docs/evidence/2026-11-09-feature-immersive-site/home-1280px-dark.png"
+      ]
+    }
+  ]
+}

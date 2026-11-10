@@ -17,13 +17,16 @@ Approved wireframes are what `verify-app` compares the built page against. Add a
 
 | Date | Screen | Artifact | Status |
 | --- | --- | --- | --- |
-| _YYYY-MM-DD_ | _Home_ | _link_ | _draft / approved / built_ |
+| 2026-11-09 | Home | "2026-11-09 Personal site directions" canvas (private; this repo is public, so no link) | built |
 
 ## Personality
 Three words, and what each means in practice.
-- e.g. **Calm**: lots of whitespace, one accent colour, no gradients.
-- e.g. **Precise**: numbers in the data font, aligned decimals, units on every value.
-- e.g. **Trustworthy**: high-contrast text, no tiny grey type.
+- **Playable**: the front door is a board you play (Read the Rival's rule A); each move opens the next
+  entry. Nothing is ever locked: Skip and every contents row open pages without playing.
+- **Handmade**: a field notebook on a desk. Grid paper, a red margin line, dated entries, taped-in media
+  with a hard offset shadow, red-pen notes. No rounded cards, no gradients of colour.
+- **Exact**: counts are real and come from the brief (500 commits, 89 and 75+ merged pull requests), set
+  in the mono face. No invented numbers, quotes or results.
 
 ## Colour roles *(checked)*
 Tokens are named by role, not by value: `--color-text-muted`, never `--grey-600`. Components use
@@ -33,17 +36,26 @@ This table must match the token file; the check fails if they drift apart.
 
 | Token | Light | Dark | Role |
 | --- | --- | --- | --- |
-| `--color-bg` | #fafaf7 | #121212 | Page background |
-| `--color-surface` | #ffffff | #1c1c1c | Cards, inputs, menus |
-| `--color-text` | #1a1a1a | #f2f2ee | Body text |
-| `--color-text-muted` | #5c5c58 | #a8a8a3 | Secondary text, captions |
-| `--color-border` | #e4e4df | #2e2e2c | Decorative dividers (no contrast target) |
-| `--color-border-strong` | #8a8a84 | #7a7a74 | Input and control outlines |
-| `--color-accent` | #2759c7 | #7aa2ff | Primary buttons, links (use sparingly) |
-| `--color-on-accent` | #ffffff | #0b0b0b | Text on an accent fill |
-| `--color-danger` | #b4380a | #ff8a5c | Errors, destructive actions |
+| `--color-bg` | #f1ecdf | #17150f | The desk: page background |
+| `--color-surface` | #fbf8f0 | #211e17 | Notebook pages, the board |
+| `--color-sunken` | #e6dfcd | #2c281f | Taped-in media slots, contents rows, sealed bands |
+| `--color-text` | #1b1f27 | #efe9db | Ink: body text, your piece |
+| `--color-text-muted` | #575247 | #ada593 | Pencil: secondary text, captions |
+| `--color-border` | #ddd4bf | #3a342a | Decorative dividers (no contrast target) |
+| `--color-border-strong` | #7a7364 | #8a8170 | Board lines, control outlines |
+| `--color-accent` | #1e6b52 | #7fc8a6 | Green ink: links, the one primary action |
+| `--color-on-accent` | #ffffff | #10140f | Text on an accent fill |
+| `--color-danger` | #b5301a | #ff7a5c | Errors |
 | `--color-success` | #13733a | #4cc77a | Confirmations |
-| `--color-focus` | #2759c7 | #7aa2ff | Focus ring |
+| `--color-focus` | #1e6b52 | #7fc8a6 | Focus ring |
+| `--color-pen` | #a62b17 | #ff9479 | Red pen: margin notes, dated entry lines |
+| `--color-rival` | #b5301a | #ff7a5c | The rival's piece and trail |
+| `--color-star` | #e2b23c | #e8c04e | Star fill (decorative; the edge carries the contrast) |
+| `--color-star-edge` | #1b1f27 | #e8c04e | A star's outline on the board |
+| `--color-tape` | #e3cd85 | #6e5e2e | Masking tape on taped-in media (decorative) |
+| `--color-grid` | #e7e0cf | #26231b | Notebook grid lines (decorative) |
+| `--color-margin-rule` | #e4b5a8 | #5a2f26 | The notebook's red margin line (decorative) |
+| `--color-highlight` | #f0d86e | #6b5a1c | Highlighter behind "draft" labels |
 
 ## Contrast pairs *(checked)*
 WCAG 2.2 minimums: **4.5:1** for body text, **3:1** for large text (24px, or 14pt bold, about 18.7px) and
@@ -60,8 +72,18 @@ checked in both themes. Add a row whenever text or a control sits on a new backg
 | `--color-on-accent` | `--color-accent` | 4.5 | Primary button label |
 | `--color-danger` | `--color-bg` | 4.5 | Error text |
 | `--color-success` | `--color-bg` | 4.5 | Success text |
-| `--color-border-strong` | `--color-surface` | 3 | Input outline |
+| `--color-border-strong` | `--color-surface` | 3 | Board lines, control outlines |
 | `--color-focus` | `--color-bg` | 3 | Focus ring |
+| `--color-focus` | `--color-surface` | 3 | Focus ring on the board and pages |
+| `--color-text` | `--color-sunken` | 4.5 | Contents rows, media slot labels |
+| `--color-text-muted` | `--color-sunken` | 4.5 | Captions in media slots |
+| `--color-accent` | `--color-surface` | 4.5 | Links on notebook pages |
+| `--color-accent` | `--color-sunken` | 4.5 | Links in contents rows |
+| `--color-pen` | `--color-surface` | 4.5 | Margin notes and entry dates |
+| `--color-pen` | `--color-bg` | 4.5 | Red-pen labels on the desk |
+| `--color-rival` | `--color-surface` | 3 | The rival's piece on the board |
+| `--color-text` | `--color-highlight` | 4.5 | "Draft" label on highlighter |
+| `--color-star-edge` | `--color-surface` | 3 | A star's outline on the board |
 
 To measure a colour before it becomes a token:
 `node scripts/design-check.mjs ratio "#hex" "#hex"` or `python scripts/design_check.py ratio "#hex" "#hex"`.
@@ -69,29 +91,36 @@ To measure a colour before it becomes a token:
 ## Type
 | Token | Font / size | Use |
 | --- | --- | --- |
-| `--font-display` | _choose_ (template: Georgia, serif) | Headings |
-| `--font-body` | _choose_ (template: system sans) | Everything else |
-| `--font-data` | _choose_ (template: system mono) | Numbers, code, tables (tabular figures) |
+| `--font-display` | Bricolage Grotesque 800 (Google Fonts) | Headings |
+| `--font-body` | Newsreader 400/500, italic for margin notes (Google Fonts) | Everything else |
+| `--font-data` | IBM Plex Mono 400/500 (Google Fonts) | Labels, dates, counts, the board's score |
+| `--text-hero` | 44-88px, fluid | "Make a move." only |
 | `--text-display` | 40px | One per page at most |
-| `--text-title` | 32px | Page title |
+| `--text-title` | 32px | Entry titles |
 | `--text-heading` | 24px | Section heading |
 | `--text-subheading` | 20px | Sub-section |
-| `--text-body` | 16px, line-height 1.5 | Body |
-| `--text-small` | 14px | Captions. The floor: nothing smaller |
+| `--text-read` | 19px, line-height 1.55 | Long-form reading in the notebook |
+| `--text-body` | 16px | Body |
+| `--text-small` | 14px | Captions, labels. The floor: nothing smaller |
 
-- Pick the families on purpose for this project's personality; the template's system stacks
-  are placeholders. At most three families, each with one job. Weights: 400 body, 600 headings.
+- At most three families, each with one job. Weights: 400 body, 800 display headings.
+- Reading text stays within `--measure` (62ch).
 - Numbers that line up in columns use `--font-data` (or `font-variant-numeric: tabular-nums`).
 
 ## Space, shape, elevation, motion
 - **Space: 8px scale.** `--space-1` 8, `--space-2` 16, `--space-3` 24, `--space-4` 32,
   `--space-6` 48, `--space-8` 64. `--space-half` (4px) only for tight icon gaps.
   A raw px/rem/em in `margin`, `padding`, `gap` or `font-size` fails the check.
-- **Radius:** `--radius-sm` 4px (chips), `--radius` 8px (buttons, inputs, cards), `--radius-lg` 16px (dialogs).
-- **Elevation:** flat surfaces with a border by default. `--shadow-1` for raised (hover),
-  `--shadow-2` for overlays (menus, dialogs). Nothing else gets a shadow.
-- **Motion:** `--duration-fast` 120ms (hover, toggle), `--duration` 200ms (panels), `--ease`.
-  With `prefers-reduced-motion: reduce` both durations become 0ms, so animate with the tokens.
+  `--space-12` 96px between notebook entries on wide screens.
+- **Size:** `--size-tap` 44px (smallest target), `--size-cell` 52-76px (a board square), `--size-sealed`
+  (how much of a sealed page shows), `--size-grid` 24px (notebook grid pitch).
+- **Radius:** paper has hard edges. `--radius-sm` 2px, `--radius` 4px, `--radius-lg` 8px.
+- **Elevation:** flat paper. `--shadow-1` is a hard 3px offset for taped-in media and the board;
+  `--shadow-2` for overlays. Nothing else gets a shadow.
+- **Motion:** `--duration-fast` 120ms (hover, toggle), `--duration` 220ms (a piece's step, a page
+  opening), `--ease`. With `prefers-reduced-motion: reduce` both become 0ms, so animate with the tokens.
+- **Sound:** off until the visitor turns it on (the Sound button). Short tones for your step, the
+  rival's step, a star, and the end of a board; nothing plays on its own.
 
 ## Layout
 - Max content width 720px for reading, 1200px for dashboards.
@@ -103,10 +132,12 @@ Build from this list before inventing something new. Add a row when a component 
 
 | Component | Variants | States | Snippet | File |
 | --- | --- | --- | --- | --- |
-| Button | primary, secondary, ghost | default, hover, focus, disabled, loading | `<button class="btn btn-primary">Save</button>` | _path_ |
-| Text input | default, error | default, focus, disabled, error | `<input class="input" aria-invalid="true">` | _path_ |
-| Card | default, raised | default, hover | `<article class="card">...</article>` | _path_ |
-| _..._ | | | | |
+| Tool button | default, pressed (Sound) | default, hover, focus | `<button class="tool" type="button">Another board</button>` | src/styles/site.css |
+| Board | 5 by 5, taped-in sheet | legal square (dashed ring), star, trail, game over | `<div class="board" role="group">` (cells built by src/js/site.js) | src/styles/site.css |
+| Contents row | sealed, open | default, hover, focus | `<a class="track" href="#story">...</a>` | src/styles/site.css |
+| Notebook entry | sealed, open | sealed shows its top and an Open button | `<article class="entry" data-track="1">` | src/styles/site.css |
+| Counts strip | 2-3 counts | static | `<dl class="counts">` | src/styles/site.css |
+| Media slot | wide, normal | placeholder, filled (video or img) | `<figure class="slot">` | src/styles/site.css |
 
 Every async view has empty, loading and error states. Every interactive element has a visible focus state.
 
@@ -129,7 +160,7 @@ One row per approved UI choice; the full record (context, options, decision, con
 
 | Date | Decision | Options (artifact) | Chosen, and what was merged in | Record |
 | --- | --- | --- | --- | --- |
-| _YYYY-MM-DD_ | _Nav layout_ | _A tabs, B sidebar, C bottom bar (link)_ | _B, with A's labels_ | _docs/decisions/0001-nav.md_ |
+| 2026-11-09 | Homepage direction | A Field notebook, B Playable front door, C Instrument readout, D Liner notes | B, with A's notebook texture, C's counts strip and D's track list as contents; immersive | docs/decisions/2026-11-09-homepage-direction.md |
 
 ## Avoid
 Models drift to the same generic look when left to default. Name what this project avoids.
@@ -138,7 +169,9 @@ Models drift to the same generic look when left to default. Name what this proje
 - Shadows on everything; more than one accent colour; grey text below its contrast target.
 - A token picked because its colour looks right: pick by role, or the other theme breaks.
 - Lorem ipsum. Use real copy, with units on every physical quantity.
-- _Add this project's own:_
+- This project's own: a centred hero with two buttons, a three-card grid, "Hi, I'm" openers, stock
+  icons, glassmorphism, blue or purple gradients, and any health or brain-improvement claim.
+- Hiding content behind the game: every word stays real HTML in the page, readable without playing.
 
 ## References
 - Sites whose feel we like: _url_, and what specifically (spacing? type?)

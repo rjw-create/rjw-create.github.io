@@ -1,0 +1,40 @@
+# rjw-create.github.io
+
+Jackson Raines's personal site: a field notebook with a playable board as its front door. Each move on the
+board opens the next notebook entry (story, Pathways, Mission Board, STRAIT and the rest). "Skip to the story"
+and every contents row open entries without playing, and all the text is plain HTML in `index.html`.
+
+Plain HTML, CSS and JavaScript, no build step. GitHub Pages serves `main` from the repository root.
+
+## Files
+| Path | What it is |
+| --- | --- |
+| `index.html` | The whole page: board, contents and every entry |
+| `src/styles/tokens.css` | Design tokens (colour, type, space, motion); see `DESIGN.md` |
+| `src/styles/site.css` | Layout and components, tokens only |
+| `src/js/rival.js` | The board's rules and puzzles, no DOM (tested in `tests/rival.test.js`) |
+| `src/js/site.js` | Draws the board, plays turns, opens entries, optional sound |
+| `assets/media/` | Screen recordings and screenshots (see below) |
+
+## Adding the screen recordings and screenshots
+The page has labelled slots, such as "[screen recording: Pathways classroom mode]". To fill one:
+
+1. Put the file in `assets/media/`: mp4 (H.264), **under 10 MB each**, plus a poster image (a still from the
+   video, png or jpg) with the same name, e.g. `pathways-classroom.mp4` and `pathways-classroom.jpg`.
+2. In `index.html`, replace that slot's `<div class="slot-frame">[...]</div>` with:
+
+   ```html
+   <video src="assets/media/pathways-classroom.mp4" poster="assets/media/pathways-classroom.jpg"
+     controls muted playsinline preload="none"></video>
+   ```
+
+   For a screenshot use `<img src="assets/media/strait.jpg" alt="What the picture shows">`.
+3. Keep the `<figcaption>` under it, and write what the recording shows.
+
+Slots waiting for media: Pathways classroom mode, Read the Rival, Mission Board, STRAIT.
+
+## Checking changes
+- `npm install` once (and `npx playwright install chromium` for the UI check).
+- `./scripts/check.sh` runs the design check (tokens and contrast) and the board tests.
+- `npm run ui-check -- --both-themes` takes 375px and 1280px screenshots in light and dark and records
+  console errors and failed requests.

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jackson Raines: field notebook</title>
+<meta name="description" content="Jackson Raines, founder of Pathways. Play a short board to open the story and the work, or skip straight to it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap">
+<link rel="stylesheet" href="src/styles/tokens.css">
+<link rel="stylesheet" href="src/styles/site.css">
+<script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="masthead-name">Jackson Raines <span class="masthead-vol">field notebook, vol. 1</span></p>
+  <div class="masthead-tools">
+    <a class="skip" href="#story" data-open-all>Skip to the story</a>
+    <button class="tool" type="button" id="sound" aria-pressed="false" hidden>Sound: off</button>
+  </div>
+</header>
+
+<main>
+  <section class="front" aria-labelledby="front-title">
+    <div class="front-play">
+      <div class="board-sheet">
+        <p class="board-score" id="score" aria-hidden="true"><span>You <b id="score-you">0</b></span><span>Rival <b id="score-rival">0</b></span><span>Move <b id="score-move">1</b> of <b id="score-turns">4</b></span></p>
+        <div class="board" id="board" role="group" aria-label="Board, 5 by 5" aria-describedby="board-rule">
+          <noscript><p class="board-nojs">The board needs JavaScript. Everything it opens is below.</p></noscript>
+        </div>
+        <p class="board-status" id="status" role="status" aria-live="polite"></p>
+        <div class="board-actions" id="board-actions" hidden>
+          <button class="tool" type="button" id="again">Try this board again</button>
+          <button class="tool" type="button" id="another">Another board</button>
+        </div>
+      </div>
+      <p class="board-credit">Rule from Read the Rival, a strategy game on Pathways.</p>
+    </div>
+
+    <div class="front-text">
+      <h1 class="hero" id="front-title">Make a move.</h1>
+      <p class="rule" id="board-rule">Take more stars than the red rival in 4 moves. Each turn it steps toward the star nearest to it: it tries up, then left, right, down.</p>
+      <p class="rule-keys">You are the square piece. Tap a square next to it, or use the arrow keys on the board. Each move opens the next entry.</p>
+
+      <nav class="contents" aria-label="Contents">
+        <h2 class="label">Contents</h2>
+        <ol class="tracks">
+          <li><a class="track" href="#story" data-track-link="1"><span class="track-no">01</span><span class="track-name">Story</span><span class="track-note">the one about aiming</span><span class="track-state" data-state-for="1">sealed</span></a></li>
+          <li><a class="track" href="#pathways" data-track-link="2"><span class="track-no">02</span><span class="track-name">Pathways</span><span class="track-note">founder, Oct 2026 to now</span><span class="track-state" data-state-for="2">sealed</span></a></li>
+          <li><a class="track" href="#mission-board" data-track-link="3"><span class="track-no">03</span><span class="track-name">Mission Board</span><span class="track-note">creator, Nov 2026 to now</span><span class="track-state" data-state-for="3">sealed</span></a></li>
+          <li><a class="track" href="#strait" data-track-link="4"><span class="track-no">04</span><span class="track-name">STRAIT, research, school</span><span class="track-note">the rest of the notebook</span><span class="track-state" data-state-for="4">sealed</span></a></li>
+          <li><a class="track" href="#contact"><span class="track-no">05</span><span class="track-name">Contact</span><span class="track-note">email, LinkedIn, GitHub</span><span class="track-state is-open">open</span></a></li>
+        </ol>
+      </nav>
+      <p class="front-note">Every word the board opens is already on this page. Choose a row to open it now, or skip the board.</p>
+    </div>
+  </section>
+
+  <article class="entry" id="story" data-track="1" aria-labelledby="story-title">
+    <header class="entry-head">
+      <p class="entry-meta"><span>Entry 01</span><span>the one about aiming</span></p>
+      <h2 class="entry-title" id="story-title">Aimed at something</h2>
+    </header>
+    <div class="entry-body">
+      <p class="placeholder">[Your story, in your words]</p>
+      <p class="draft-label"><mark>draft</mark> to rewrite in your own voice</p>
+      <div class="reading">
+        <p>I have always obsessed over things: rock climbing, basketball, academics, modelling, and now this company.</p>
+        <p>Aimed at nothing, the obsession went into my phone. Aimed at something I care about, I am unstoppable.</p>
+        <p>Pathways exists to give people something worth aiming at.</p>
+      </div>
+    </div>
+    <button class="unseal" type="button" data-open="1">Open entry 01</button>
+  </article>
+
+  <article class="entry" id="pathways" data-track="2" aria-labelledby="pathways-title">
+    <header class="entry-head">
+      <p class="entry-meta"><span>Entry 02</span><span>Founder</span><span>Oct 2026 to now</span></p>
+      <h2 class="entry-title" id="pathways-title">Pathways</h2>
+    </header>
+    <div class="entry-body">
+      <dl class="counts" aria-label="Pathways in numbers">
+        <div><dt>commits</dt><dd>500</dd></div>
+        <div><dt>merged pull requests</dt><dd>89</dd></div>
+        <div><dt>to a working site</dt><dd>&lt;3 weeks</dd></div>
+      </dl>
+      <div class="reading">
+        <p>A company changing the way people think, learn and create through games, classroom tools and things you actually make.</p>
+        <p>I shipped a working learning site in under three weeks: daily and weekly puzzles, the original strategy game Read the Rival, and a live classroom mode with join codes and a projector view.</p>
+        <p><strong>Next:</strong> a classroom tool, school controls and a catalog of deeper games where you make things, starting with the detective game The Bureau.</p>
+      </div>
+      <aside class="margin-note">The board at the top of this page uses Read the Rival's first rule.</aside>
+      <div class="media">
+        <figure class="slot slot-wide"><div class="slot-frame">[screen recording: Pathways classroom mode]</div><figcaption>Classroom mode: join codes and the projector view.</figcaption></figure>
+        <figure class="slot"><div class="slot-frame">[screen recording: Read the Rival]</div><figcaption>Read the Rival.</figcaption></figure>
+      </div>
+    </div>
+    <button class="unseal" type="button" data-open="2">Open entry 02</button>
+  </article>
+
+  <article class="entry" id="mission-board" data-track="3" aria-labelledby="mb-title">
+    <header class="entry-head">
+      <p class="entry-meta"><span>Entry 03</span><span>Creator</span><span>Nov 2026 to now</span></p>
+      <h2 class="entry-title" id="mb-title">Mission Board</h2>
+    </header>
+    <div class="entry-body">
+      <dl class="counts" aria-label="Mission Board in numbers">
+        <div><dt>merged pull requests</dt><dd>75+</dd></div>
+        <div><dt>AI orchestrators</dt><dd>3</dd></div>
+      </dl>
+      <div class="reading">
+        <p>A multi-agent system: three AI orchestrators plan work, run parallel coding agents and review pull requests, and nothing merges until I approve it.</p>
+        <p>Alongside it, a token-efficiency lab.</p>
+      </div>
+      <div class="media">
+        <figure class="slot slot-wide"><div class="slot-frame">[screen recording: Mission Board]</div><figcaption>The Mission Board.</figcaption></figure>
+      </div>
+    </div>
+    <button class="unseal" type="button" data-open="3">Open entry 03</button>
+  </article>
+
+  <article class="entry" id="strait" data-track="4" aria-labelledby="strait-title">
+    <header class="entry-head">
+      <p class="entry-meta"><span>Entry 04</span><span>Engineering design team lead</span></p>
+      <h2 class="entry-title" id="strait-title">STRAIT</h2>
+    </header>
+    <div class="entry-body">
+      <div class="reading">
+        <p>A portable ground-imaging instrument: electrical resistivity tomography plus FMCW radar. I led the engineering design team. We won the state TSA Engineering Design title, a first for my school.</p>
+      </div>
+      <div class="media">
+        <figure class="slot"><div class="slot-frame">[screenshot: STRAIT]</div><figcaption>STRAIT.</figcaption></figure>
+      </div>
+      <section class="side-pages" aria-labelledby="more-title">
+        <h3 class="label" id="more-title">Side pages</h3>
+        <dl class="ledger">
+          <div><dt>Research</dt><dd>University of Kentucky lab fellowship: cDNA libraries <span class="when">2026</span></dd></div>
+          <div><dt>Research</dt><dd>Formal proof of an AI scheduler's scoring function, NexEdge Labs <span class="when">2026</span></dd></div>
+          <div><dt>School</dt><dd>University of Kentucky, B.S. Chemical Engineering <span class="when">2026 to now</span></dd></div>
+          <div><dt>Also</dt><dd>Trumpet: 3x All-State, invited jazz performer</dd></div>
+        </dl>
+      </section>
+    </div>
+    <button class="unseal" type="button" data-open="4">Open entry 04</button>
+  </article>
+</main>
+
+<footer class="contact" id="contact" aria-labelledby="contact-title">
+  <h2 class="entry-title" id="contact-title">Write to me</h2>
+  <ul class="contact-links">
+    <li><a href="mailto:jwra230@uky.edu">jwra230@uky.edu</a></li>
+    <li><a href="https://linkedin.com/in/jackson-raines">linkedin.com/in/jackson-raines</a></li>
+    <li><a href="https://github.com/rjw-create">github.com/rjw-create</a></li>
+  </ul>
+</footer>
+
+<script src="src/js/rival.js"></script>
+<script src="src/js/site.js"></script>
+</body>
+</html>

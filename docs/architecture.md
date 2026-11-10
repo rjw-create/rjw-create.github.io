@@ -4,28 +4,31 @@
 > Update it when the shape of the system changes, not for every feature.
 
 ## What this is
-One paragraph: what the system does and for whom.
+Jackson Raines's personal site: one static page served by GitHub Pages from `main`. A small board (Read the
+Rival's rule A) is the front door; each move opens the next notebook entry. All content is plain HTML.
 
 ## Main pieces
 | Part | Where | Responsibility |
 | --- | --- | --- |
-| e.g. API | `src/api/` | HTTP routes, input validation |
-| e.g. Core logic | `src/core/` | Business rules, no I/O |
-| e.g. Storage | `src/db/` | Schema, queries, migrations |
+| Page | `index.html` | All content, contents list, board container |
+| Game rules | `src/js/rival.js` | Pure rules and puzzles; works in the browser (`window.Rival`) and in Node tests |
+| Front door | `src/js/site.js` | Board drawing, input (tap, click, arrow keys), opening entries, opt-in sound |
+| Styles | `src/styles/tokens.css`, `src/styles/site.css` | Tokens, then layout and components (tokens only) |
 
-## How a request flows
-1. ...
-2. ...
-
-## Data
-- Where it's stored, main tables/collections, and where the schema lives.
+## How a visit flows
+1. Without JavaScript, every entry is open and the board says it needs JavaScript.
+2. With JavaScript, `html.js` seals entries 01-04 (their top shows; the text stays in the page).
+3. Each move opens the next entry; Skip, a contents row, an entry's Open button or a `#hash` opens entries directly.
 
 ## External services
-- Name — what we use it for — where the client code lives — env var names (never values).
+- Google Fonts: Bricolage Grotesque, Newsreader, IBM Plex Mono (stylesheet link in `index.html`).
 
 ## Rules of the road
-- e.g. Core logic never imports from the API layer.
-- e.g. All DB access goes through `src/db/`.
+- `rival.js` never touches the DOM; `tests/rival.test.js` proves every shipped puzzle has exactly one
+  winning first move that is not the step toward your nearest star.
+- Never hide text from readers: sealing is visual only (no `display: none`, no `aria-hidden` on content).
+- No build step and no dependencies beyond the UI check's Playwright.
 
 ## Known weak spots
-- Things that are fragile or due for a rewrite, so Claude handles them carefully.
+- Sealed entries clip with `max-height`; very long entries still open fully, but the sealed preview height
+  is one token (`--size-sealed`).
