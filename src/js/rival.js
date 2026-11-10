@@ -165,13 +165,29 @@
       level.stars.some((x) => dist(level.you, x) === near && dist(m.to, x) < near));
   }
 
-  // The hint under the board after a visitor loses a level twice in a row: the level's own line if it has
-  // one, else the winning first step. Null before the second loss.
+  // The hint under the board after a visitor loses a level twice in a row. Only levels with their own line
+  // have one; the others go straight to revealing moves. Null before the second loss.
   const HINT_AFTER_LOSSES = 2;
   function hintFor(level, losses) {
-    if (losses < HINT_AFTER_LOSSES) return null;
-    if (level.hint) return `Hint: ${level.hint}`;
-    return `Hint: your first step should be ${winningMoves(startState(level))[0].dir}.`;
+    if (losses < HINT_AFTER_LOSSES || !level.hint) return null;
+    return `Hint: ${level.hint}`;
+  }
+
+  // Whether a loss offers one more move of the level's winning line. The offer starts one loss after the
+  // text hint (or at the second loss on a level without one) and stops once the whole line is shown.
+  function canRevealMove(level, losses, revealed) {
+    const from = level.hint ? HINT_AFTER_LOSSES + 1 : HINT_AFTER_LOSSES;
+    return losses >= from && revealed < level.solution.length;
+  }
+
+  // The squares you stand on after each of a level's first `count` solution moves, with each move's step.
+  function solutionPath(level, count) {
+    let s = startState(level);
+    return level.solution.slice(0, count).map((dir, i) => {
+      const to = stepTo(s.you, DIRS.find((d) => d.name === dir));
+      s = play(s, to).state;
+      return { no: i + 1, dir, sq: to };
+    });
   }
 
   // Rules that could have made the rival's last two steps (trail[0] -> trail[1] -> its square).
@@ -185,16 +201,23 @@
   // tests/rival.test.js proves each one is winnable (levels 2-4: exactly one winning first move, not the
   // step toward your nearest star) and that level 4's trail fits only its hidden rule. Without the old move
   // limit, level 3's star 16 moved to 18 and level 4's start moved from 10 to 5 (docs/decisions, 2026-11-09).
+  // `solution` is one winning line, revealed a move at a time after losses. It was generated once with the
+  // solver (best margin, ties toward fewer stars left, then unseen positions, since the solver values a
+  // no-star loop the same as progress); the tests replay it. Regenerate it if a level changes.
   const LEVELS = [
-    { id: "story", name: "Story", rule: "A", hidden: false, you: 12, rival: 4, stars: [1, 5, 16, 20] },
-    { id: "pathways", name: "Pathways", rule: "B", hidden: false, you: 23, rival: 11, stars: [3, 6, 8, 20, 21] },
+    { id: "story", name: "Story", rule: "A", hidden: false, you: 12, rival: 4, stars: [1, 5, 16, 20],
+      solution: ["up", "up", "left", "left", "down", "down", "down", "down"] },
+    { id: "pathways", name: "Pathways", rule: "B", hidden: false, you: 23, rival: 11, stars: [3, 6, 8, 20, 21],
+      solution: ["up", "up", "up", "left", "up", "left", "down", "down", "down", "down", "left"] },
     // Only the first step left wins here, which visitors took for "impossible", so its hint names the trick.
     { id: "mission-board", name: "Mission Board", rule: "C", hidden: false, you: 2, rival: 19, stars: [10, 17, 18, 23, 24],
-      hint: "It chases the star nearest you. Lead it somewhere else first." },
-    { id: "strait", name: "STRAIT", rule: "B", hidden: true, you: 5, rival: 22, stars: [0, 2, 8, 13, 18], trail: [20, 21] },
+      hint: "It chases the star nearest you. Lead it somewhere else first.",
+      solution: ["left", "left", "right", "right", "left", "right", "down", "right", "down", "down", "down", "right"] },
+    { id: "strait", name: "STRAIT", rule: "B", hidden: true, you: 5, rival: 22, stars: [0, 2, 8, 13, 18], trail: [20, 21],
+      solution: ["right", "right", "right", "up", "left", "left", "left"] },
   ];
 
-  const api = { N, DIRS, RULES, LEVELS, rowOf, colOf, dist, squareName, stepTo, dirBetween, legalMoves, rivalStep, startState, play, isOver, bestMargin, futureMargin, winningMoves, reachableStates, greedyFirstMoves, rulesFitting, hintFor };
+  const api = { N, DIRS, RULES, LEVELS, rowOf, colOf, dist, squareName, stepTo, dirBetween, legalMoves, rivalStep, startState, play, isOver, bestMargin, futureMargin, winningMoves, reachableStates, greedyFirstMoves, rulesFitting, hintFor, canRevealMove, solutionPath };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.Rival = api;
 })(this);
