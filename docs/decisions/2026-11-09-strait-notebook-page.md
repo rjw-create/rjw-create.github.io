@@ -37,6 +37,8 @@ Content decisions made with it:
   order list (team ID and school notes) and a scanned PDF with no readable text.
 - The design-stage diagrams show parts the final build changed (INA128, MCP23017); their captions say so.
 
+PR with screenshots: https://github.com/rjw-create/rjw-create.github.io/pull/5
+
 ## Consequences
 - `strait.html` is a second page; it shares `tokens.css` and `site.css` and needs no JavaScript.
 - New components: the contents strip and the parts table (DESIGN.md's component inventory).
