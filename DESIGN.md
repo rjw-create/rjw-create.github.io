@@ -146,6 +146,9 @@ Build from this list before inventing something new. Add a row when a component 
 | Media slot | wide, normal | placeholder, filled (video or img) | `<figure class="slot">` | src/styles/site.css |
 | Contents strip | wraps to rows on phones | default, hover, focus | `<nav class="contents"><ol><li><a href="#circuit">02 The circuit</a></li></ol></nav>` | src/styles/site.css |
 | Parts table | group rows, total row | scrolls sideways in its box when narrow | `<div class="table-scroll" role="region" tabindex="0"><table class="parts">` | src/styles/site.css |
+| Photo strip | 2 across (phone), 3 across (wide); media slots inside | static | `<div class="photo-strip" role="group" aria-labelledby="photos-title"><figure class="slot">` | src/styles/site.css |
+| Document card | with or without a preview image | static; PDF links open a new tab | `<ul class="docs"><li class="document"><h3>...</h3><dl class="document-facts">` | src/styles/site.css |
+| Documentation page | the nationals write-up's own markup, classes prefixed `doc-` | tables scroll sideways in their box | `<article class="entry doc">` (strait-nationals-documentation.html) | src/styles/site.css |
 
 Every async view has empty, loading and error states. Every interactive element has a visible focus state.
 
@@ -170,6 +173,7 @@ One row per approved UI choice; the full record (context, options, decision, con
 | --- | --- | --- | --- | --- |
 | 2026-11-09 | Homepage direction | A Field notebook, B Playable front door, C Instrument readout, D Liner notes | B as the whole site (levels = entries, after Jackson's "centered around the game" feedback), with A's notebook texture, C's counts strip and D's track list as the level path | docs/decisions/2026-11-09-homepage-direction.md |
 | 2026-11-09 | STRAIT notebook page | A Notebook spread, B Signal-chain index, C Spec sheet and plates | A's entry and story order, with B's contents strip (not a sidebar) and C's counts strip | docs/decisions/2026-11-09-strait-notebook-page.md |
+| 2026-11-09 | STRAIT documents and photos | Brief and Captain's DECIDED (no options round): which documents, as-is trifold, photo in the ground on the first screen | Documents section (07) with three cards, nationals write-up as a site page, photo strip in The build | docs/decisions/2026-11-09-strait-documents.md |
 
 ## Avoid
 Models drift to the same generic look when left to default. Name what this project avoids.
