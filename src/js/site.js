@@ -226,7 +226,7 @@
 
   function ruleHtml(level) {
     const goal = `<p class="rule-goal">Take more stars than the red rival. The level ends when all ${level.stars.length} stars are gone.</p>`;
-    const keys = '<p class="rule-keys">You are the square. Tap a square next to it, or use the arrow keys on the board.</p>';
+    const keys = '<p class="rule-keys">You are the square. Tap a square next to it, or press the arrow keys.</p>';
     if (!level.hidden) return `${goal}<p class="rule-text">${R.RULES[level.rule].text}</p>${keys}`;
     const list = Object.keys(R.RULES).map((id) => `<li>${R.RULES[id].text}</li>`).join("");
     return `${goal}<p class="rule-text">Its rule is hidden. It is one of these; the red dots are its last two steps.</p><ol class="rule-list" type="A">${list}</ol>${keys}`;
@@ -323,9 +323,14 @@
     if (first && (force || els.game.contains(document.activeElement))) first.focus();
   }
 
-  els.board.addEventListener("keydown", (e) => {
+  // Arrow keys play from anywhere on the game screen, not only once the board has focus (the user, 2026-11-09).
+  // Left alone: the reading view, an open entry page, typing in a field, and keys pressed with a modifier.
+  document.addEventListener("keydown", (e) => {
     const dir = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right" }[e.key];
-    if (!dir) return;
+    if (!dir || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (root.classList.contains("mode-reading") || els.sheet.open) return;
+    const t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
     e.preventDefault();
     const move = R.legalMoves(state.you, state.rival).find((m) => m.dir === dir);
     if (move) tryMove(move.to);
