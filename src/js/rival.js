@@ -165,6 +165,15 @@
       level.stars.some((x) => dist(level.you, x) === near && dist(m.to, x) < near));
   }
 
+  // The hint under the board after a visitor loses a level twice in a row: the level's own line if it has
+  // one, else the winning first step. Null before the second loss.
+  const HINT_AFTER_LOSSES = 2;
+  function hintFor(level, losses) {
+    if (losses < HINT_AFTER_LOSSES) return null;
+    if (level.hint) return `Hint: ${level.hint}`;
+    return `Hint: your first step should be ${winningMoves(startState(level))[0].dir}.`;
+  }
+
   // Rules that could have made the rival's last two steps (trail[0] -> trail[1] -> its square).
   function rulesFitting(level) {
     const [a, b] = level.trail;
@@ -179,11 +188,13 @@
   const LEVELS = [
     { id: "story", name: "Story", rule: "A", hidden: false, you: 12, rival: 4, stars: [1, 5, 16, 20] },
     { id: "pathways", name: "Pathways", rule: "B", hidden: false, you: 23, rival: 11, stars: [3, 6, 8, 20, 21] },
-    { id: "mission-board", name: "Mission Board", rule: "C", hidden: false, you: 2, rival: 19, stars: [10, 17, 18, 23, 24] },
+    // Only the first step left wins here, which visitors took for "impossible", so its hint names the trick.
+    { id: "mission-board", name: "Mission Board", rule: "C", hidden: false, you: 2, rival: 19, stars: [10, 17, 18, 23, 24],
+      hint: "It chases the star nearest you. Lead it somewhere else first." },
     { id: "strait", name: "STRAIT", rule: "B", hidden: true, you: 5, rival: 22, stars: [0, 2, 8, 13, 18], trail: [20, 21] },
   ];
 
-  const api = { N, DIRS, RULES, LEVELS, rowOf, colOf, dist, squareName, stepTo, dirBetween, legalMoves, rivalStep, startState, play, isOver, bestMargin, futureMargin, winningMoves, reachableStates, greedyFirstMoves, rulesFitting };
+  const api = { N, DIRS, RULES, LEVELS, rowOf, colOf, dist, squareName, stepTo, dirBetween, legalMoves, rivalStep, startState, play, isOver, bestMargin, futureMargin, winningMoves, reachableStates, greedyFirstMoves, rulesFitting, hintFor };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.Rival = api;
 })(this);

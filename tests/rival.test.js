@@ -100,3 +100,18 @@ test("level 4's trail fits only its hidden rule", () => {
   const last = R.LEVELS[3];
   assert.deepEqual(R.rulesFitting(last), [last.rule]);
 });
+
+test("level 3's hint shows after the second loss, not before", () => {
+  const level3 = R.LEVELS[2];
+  assert.equal(R.hintFor(level3, 0), null);
+  assert.equal(R.hintFor(level3, 1), null);
+  assert.equal(R.hintFor(level3, 2), "Hint: It chases the star nearest you. Lead it somewhere else first.");
+  assert.equal(R.hintFor(level3, 3), "Hint: It chases the star nearest you. Lead it somewhere else first.");
+});
+
+test("levels without their own hint still name the winning first step after two losses", () => {
+  const level1 = R.LEVELS[0];
+  assert.equal(R.hintFor(level1, 1), null);
+  const first = R.winningMoves(R.startState(level1))[0].dir;
+  assert.equal(R.hintFor(level1, 2), `Hint: your first step should be ${first}.`);
+});
