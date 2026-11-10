@@ -154,9 +154,7 @@
       if (it.state) b.dataset.state = it.state;
       if (it.current) b.setAttribute("aria-current", "step");
       const stateText = it.state === "won" ? "won" : it.state === "skipped" ? "skipped" : it.state === "finale" ? "finale" : it.current ? "playing" : "";
-      // Soft hyphens let long names break cleanly in the narrow phone path.
-      const shown = { Pathways: "Path&shy;ways", Contact: "Con&shy;tact" }[it.name] || it.name;
-      b.innerHTML = `<span class="path-no">${it.no}</span><span class="path-name">${shown}</span><span class="path-state">${stateText}</span>`;
+      b.innerHTML = `<span class="path-no">${it.no}</span><span class="path-name">${it.name}</span><span class="path-state">${stateText}</span>`;
       b.setAttribute("aria-label", `${it.state === "finale" ? "Finale" : "Level " + Number(it.no)}: ${it.name}${stateText ? ", " + stateText : ""}`);
       b.addEventListener("click", it.go);
       li.appendChild(b);

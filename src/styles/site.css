@@ -118,14 +118,21 @@ a:hover { text-decoration-thickness: var(--border-width); }
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  /* Phones: two rows (three tabs, then two) so every name fits whole. */
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: var(--space-half);
 }
+.path-list li { grid-column: span 2; }
+.path-list li:nth-child(n + 4) { grid-column: span 3; }
 .path-step {
   display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: var(--space-1);
   width: 100%;
+  height: 100%;
   min-height: var(--size-tap);
-  padding: var(--space-half);
+  padding: var(--space-half) var(--space-1);
   border: 0;
   border-top: var(--border-width-heavy) solid var(--color-border-strong);
   background: var(--color-sunken);
@@ -141,7 +148,6 @@ a:hover { text-decoration-thickness: var(--border-width); }
   font-weight: 700;
   font-size: var(--text-small);
   line-height: var(--leading-tight);
-  hyphens: manual;
 }
 /* On phones the state word is left to the button's label and colour; wide screens show it. */
 .path-state { display: none; font-family: var(--font-data); font-size: var(--text-small); color: var(--color-text-muted); }
@@ -495,6 +501,8 @@ mark { padding: 0 var(--space-half); background: var(--color-highlight); color: 
   .status { min-height: calc(var(--text-body) * var(--leading-body) * 3); margin-top: var(--space-2); }
   .path { justify-self: end; max-width: 15rem; }
   .path-list { grid-template-columns: 1fr; gap: var(--space-1); }
+  .path-list li,
+  .path-list li:nth-child(n + 4) { grid-column: auto; }
   .path-step { grid-template-columns: auto 1fr; grid-template-areas: "no name" "no state"; column-gap: var(--space-2); padding: var(--space-1) var(--space-2); }
   .path-no { grid-area: no; align-self: center; }
   .path-name { grid-area: name; font-size: var(--text-subheading); }
