@@ -219,7 +219,7 @@
     { id: "mission-board", name: "Mission Board", rule: "C", hidden: false, you: 2, rival: 19, stars: [10, 17, 18, 23, 24],
       hint: "It chases the star nearest you. Lead it somewhere else first.",
       solution: ["left", "left", "right", "right", "left", "right", "down", "right", "down", "down", "down", "right"] },
-    { id: "strait", name: "STRAIT", rule: "B", hidden: true, you: 5, rival: 22, stars: [0, 2, 8, 13, 18], trail: [20, 21],
+    { id: "msit", name: "MSIT", rule: "B", hidden: true, you: 5, rival: 22, stars: [0, 2, 8, 13, 18], trail: [20, 21],
       solution: ["right", "right", "right", "up", "left", "left", "left"] },
   ];
 

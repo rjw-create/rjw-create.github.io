@@ -77,7 +77,7 @@ for (const [i, level] of R.LEVELS.entries()) {
 }
 
 test("levels follow the entries in order and vary the rule", () => {
-  assert.deepEqual(R.LEVELS.map((l) => l.id), ["story", "pathways", "mission-board", "strait"]);
+  assert.deepEqual(R.LEVELS.map((l) => l.id), ["story", "pathways", "mission-board", "msit"]);
   assert.deepEqual(R.LEVELS.map((l) => l.rule), ["A", "B", "C", "B"]);
   assert.deepEqual(R.LEVELS.map((l) => l.hidden), [false, false, false, true]);
 });

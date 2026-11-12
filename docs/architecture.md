@@ -23,6 +23,8 @@ Read the Rival levels, one per notebook entry, then a Contact finale. All conten
    Each entry exists once in the page.
 4. "Read without playing" switches to `html.mode-reading`: the game hides and the reading view shows.
 5. `#level-N` opens a level; an entry id (`#pathways`) opens the reading view there.
+6. Old names keep working: `#strait` is an empty element inside the MSIT entry, and `strait.html` and
+   `strait-nationals-documentation.html` are redirect pages (`tests/site-links.test.js` holds this).
 
 ## External services
 - Google Fonts: Bricolage Grotesque, Newsreader, IBM Plex Mono (stylesheet link in `index.html`).
