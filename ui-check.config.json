@@ -4,8 +4,11 @@
     { "name": "home", "path": "/" },
     { "name": "level-4-hidden-rule", "path": "/#level-4" },
     { "name": "reading-view", "path": "/#story" },
-    { "name": "strait", "path": "/strait.html" },
-    { "name": "strait-nationals-documentation", "path": "/strait-nationals-documentation.html" }
+    { "name": "home-old-strait-link", "path": "/#strait" },
+    { "name": "msit", "path": "/msit.html" },
+    { "name": "msit-documents", "path": "/msit.html#documents" },
+    { "name": "old-strait-page-redirect", "path": "/strait.html#documents" },
+    { "name": "msit-nationals-documentation", "path": "/msit-nationals-documentation.html" }
   ],
   "widths_px": [375, 1280],
   "ignore": ["/favicon\\.ico$"]

@@ -21,7 +21,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SELF = new Set(["design-check.mjs", "design_check.py"]);
 // Documents published byte for byte with their own styles (Jackson, 2026-11-10): not the site's styling,
 // so the token lint leaves them alone. Paths are relative to the repo root.
-const VERBATIM = new Set(["strait-nationals-documentation.html"]);
+const VERBATIM = new Set(["msit-nationals-documentation.html"]);
 const SKIP_DIRS = new Set([
   "node_modules", ".git", ".venv", "venv", "dist", "build", "out", "coverage", ".next", ".nuxt",
   ".svelte-kit", ".claude", "docs", "specs", "__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache",
