@@ -1,10 +1,13 @@
 # startup-personal-site
 
 Jackson's personal website (static HTML/CSS/JS, served by GitHub Pages from `main` at rjw-create.github.io), first
-used for the Sandbox Founder Residency application (priority deadline 2026-11-15). Direction picked 2026-11-09:
+used for the Sandbox Founder Residency application (submitted 2026-11-13). Direction picked 2026-11-09:
 "B plus merged parts, immersive" (a playable front door; notebook, counts strip and track-list index merged in) from
 the 2026-11-09 Personal site directions canvas. It must not read as AI-made; no health or brain claims; the story
 is in Jackson's own words. This repo is public: never commit private links, secrets or other people's details.
+- The founder story is the 2026-11-13 version ("Something worth making"). Never write, restore or paraphrase the
+  older story it replaced (Jackson, 2026-11-13). Its key words are listed in `tests/banned-phrases.test.js`, which
+  fails when any tracked file uses them.
 
 ## Commands
 - Verify everything: ./scripts/check.sh
