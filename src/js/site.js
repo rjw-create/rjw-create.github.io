@@ -74,7 +74,7 @@
   // In game mode the reading view is off screen; its links leave the Tab order (screen-reader browsing
   // still reaches them) so sighted keyboard users never land on something they cannot see.
   function setReadingFocusable(yes) {
-    els.reading.querySelectorAll("a, button").forEach((el) => {
+    els.reading.querySelectorAll("a, button, video").forEach((el) => {
       if (el === els.backToGame) return;
       if (yes) el.removeAttribute("tabindex");
       else el.setAttribute("tabindex", "-1");
@@ -102,7 +102,7 @@
     borrowed = { node, home: node.nextSibling };
     els.sheetLabel.textContent = label;
     els.sheetPage.appendChild(node);
-    node.querySelectorAll("a").forEach((a) => a.removeAttribute("tabindex"));
+    node.querySelectorAll("a, video").forEach((a) => a.removeAttribute("tabindex"));
     els.sheetNext.textContent = nextText;
     els.sheetNext.onclick = () => { els.sheet.close(); onNext(); };
     els.sheet.showModal();
@@ -112,6 +112,7 @@
 
   function putBack() {
     if (!borrowed) return;
+    borrowed.node.querySelectorAll("video").forEach((v) => v.pause());
     els.reading.insertBefore(borrowed.node, borrowed.home);
     borrowed = null;
     setReadingFocusable(root.classList.contains("mode-reading"));

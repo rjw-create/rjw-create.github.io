@@ -4,6 +4,8 @@
     { "name": "home", "path": "/" },
     { "name": "level-4-hidden-rule", "path": "/#level-4" },
     { "name": "reading-view", "path": "/#story" },
+    { "name": "pathways-media", "path": "/#pathways" },
+    { "name": "mission-board-media", "path": "/#mission-board" },
     { "name": "home-old-strait-link", "path": "/#strait" },
     { "name": "msit", "path": "/msit.html" },
     { "name": "msit-documents", "path": "/msit.html#documents" },

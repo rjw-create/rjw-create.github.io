@@ -36,7 +36,7 @@ The page has labelled slots, such as "[screen recording: Pathways classroom mode
    For a screenshot use `<img src="assets/media/msit.jpg" alt="What the picture shows">`.
 3. Keep the `<figcaption>` under it, and write what the recording shows.
 
-Slots waiting for media: Pathways classroom mode, Read the Rival, Mission Board, MSIT.
+Slots waiting for media: none.
 
 ## Checking changes
 - `npm install` once (and `npx playwright install chromium` for the UI check).
