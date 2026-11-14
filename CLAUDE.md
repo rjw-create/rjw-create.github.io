@@ -6,8 +6,8 @@ used for the Sandbox Founder Residency application (submitted 2026-11-13). Direc
 the 2026-11-09 Personal site directions canvas. It must not read as AI-made; no health or brain claims; the story
 is in Jackson's own words. This repo is public: never commit private links, secrets or other people's details.
 - The founder story is the 2026-11-13 version ("Something worth making"). Never write, restore or paraphrase the
-  older story it replaced (Jackson, 2026-11-13). Its key words are listed in `tests/banned-phrases.test.js`, which
-  fails when any tracked file uses them.
+  older story it replaced (Jackson, 2026-11-13). A written rule is enough; no automated word check (Jackson,
+  2026-11-14).
 
 ## Commands
 - Verify everything: ./scripts/check.sh
