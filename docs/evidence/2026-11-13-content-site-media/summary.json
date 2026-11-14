@@ -1,0 +1,129 @@
+{
+  "date": "2026-11-13",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "widths_px": [
+    375,
+    1280
+  ],
+  "base": "http://127.0.0.1:26438",
+  "contrast": {
+    "status": "pass",
+    "cmd": "node scripts/design-check.mjs",
+    "tail": "Contrast (WCAG 2.2, colours from src/styles/tokens.css) | DESIGN CHECK PASSED"
+  },
+  "pages": [
+    {
+      "name": "home",
+      "path": "/",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-13-content-site-media/home-375px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/home-1280px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/home-375px-dark.png",
+        "docs/evidence/2026-11-13-content-site-media/home-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "level-4-hidden-rule",
+      "path": "/#level-4",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-13-content-site-media/level-4-hidden-rule-375px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/level-4-hidden-rule-1280px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/level-4-hidden-rule-375px-dark.png",
+        "docs/evidence/2026-11-13-content-site-media/level-4-hidden-rule-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "reading-view",
+      "path": "/#story",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-13-content-site-media/reading-view-375px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/reading-view-1280px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/reading-view-375px-dark.png",
+        "docs/evidence/2026-11-13-content-site-media/reading-view-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "pathways-media",
+      "path": "/#pathways",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-13-content-site-media/pathways-media-375px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/pathways-media-1280px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/pathways-media-375px-dark.png",
+        "docs/evidence/2026-11-13-content-site-media/pathways-media-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "mission-board-media",
+      "path": "/#mission-board",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-13-content-site-media/mission-board-media-375px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/mission-board-media-1280px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/mission-board-media-375px-dark.png",
+        "docs/evidence/2026-11-13-content-site-media/mission-board-media-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "home-old-strait-link",
+      "path": "/#strait",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-13-content-site-media/home-old-strait-link-375px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/home-old-strait-link-1280px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/home-old-strait-link-375px-dark.png",
+        "docs/evidence/2026-11-13-content-site-media/home-old-strait-link-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "msit",
+      "path": "/msit.html",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-13-content-site-media/msit-375px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/msit-1280px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/msit-375px-dark.png",
+        "docs/evidence/2026-11-13-content-site-media/msit-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "msit-documents",
+      "path": "/msit.html#documents",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-13-content-site-media/msit-documents-375px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/msit-documents-1280px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/msit-documents-375px-dark.png",
+        "docs/evidence/2026-11-13-content-site-media/msit-documents-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "old-strait-page-redirect",
+      "path": "/strait.html#documents",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-13-content-site-media/old-strait-page-redirect-375px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/old-strait-page-redirect-1280px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/old-strait-page-redirect-375px-dark.png",
+        "docs/evidence/2026-11-13-content-site-media/old-strait-page-redirect-1280px-dark.png"
+      ]
+    },
+    {
+      "name": "msit-nationals-documentation",
+      "path": "/msit-nationals-documentation.html",
+      "problems": [],
+      "shots": [
+        "docs/evidence/2026-11-13-content-site-media/msit-nationals-documentation-375px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/msit-nationals-documentation-1280px-light.png",
+        "docs/evidence/2026-11-13-content-site-media/msit-nationals-documentation-375px-dark.png",
+        "docs/evidence/2026-11-13-content-site-media/msit-nationals-documentation-1280px-dark.png"
+      ]
+    }
+  ]
+}

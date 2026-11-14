@@ -32,10 +32,10 @@ test("the home page opens the MSIT entry for #msit and for the old #strait", () 
   assert.equal(html.split('id="strait"').length - 1, 1, "the old id appears once");
 });
 
-test("every local link and image on the home and MSIT pages points at a file that exists", () => {
+test("every local link, image, video and poster on the home and MSIT pages points at a file that exists", () => {
   for (const page of ["index.html", "msit.html"]) {
     const html = read(page);
-    for (const match of html.matchAll(/(?:href|src)="([^"#:]+)(?:#[^"]*)?"/g)) {
+    for (const match of html.matchAll(/(?:href|src|poster)="([^"#:]+)(?:#[^"]*)?"/g)) {
       assert.ok(fs.existsSync(path.join(root, match[1])), `${page} links to ${match[1]}`);
     }
   }
@@ -44,4 +44,14 @@ test("every local link and image on the home and MSIT pages points at a file tha
 test("the documentation PDF is the web copy: under 10 MB", () => {
   const size = fs.statSync(path.join(root, "assets/msit/msit-documentation.pdf")).size;
   assert.ok(size < 10_000_000, `${size} bytes`);
+});
+
+test("every screen recording in assets/media is under 10 MB", () => {
+  const dir = path.join(root, "assets/media");
+  const clips = fs.readdirSync(dir).filter((f) => f.endsWith(".mp4"));
+  assert.ok(clips.length > 0, "no mp4 files found");
+  for (const clip of clips) {
+    const size = fs.statSync(path.join(dir, clip)).size;
+    assert.ok(size < 10_000_000, `${clip}: ${size} bytes`);
+  }
 });
