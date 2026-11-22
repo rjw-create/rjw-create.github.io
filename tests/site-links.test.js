@@ -111,3 +111,12 @@ test("the rule panel uses two text sizes at every screen width", () => {
   }
   assert.deepEqual([...sizes].sort(), ["var(--text-body)", "var(--text-small)"]);
 });
+
+// The HUD counts levels ("Level 1 of 4"); a numbered Contact step ("05") made the path look like five levels.
+test("only the four levels carry numbers in the path; Contact is marked End", () => {
+  const js = read("src/js/site.js");
+  assert.match(js, /Level \$\{i \+ 1\} of \$\{LEVELS\.length\}/, "HUD counts levels");
+  const contact = /items\.push\(\{[^}]*name: "Contact"[^}]*\}\)/.exec(js);
+  assert.ok(contact, "the path adds a Contact step");
+  assert.match(contact[0], /no: "End"/);
+});

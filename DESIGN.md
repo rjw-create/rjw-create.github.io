@@ -177,6 +177,7 @@ One row per approved UI choice; the full record (context, options, decision, con
 | 2026-11-10 | MSIT cleanup | Jackson's request (no options round): drop the trifold and sketch, publish the original nationals page unchanged | One document card; the original page with its own styles replaces the restyled one; MSIT photo on the home page | docs/decisions/2026-11-10-strait-cleanup.md |
 | 2026-11-12 | MSIT rename and documentation PDF | Jackson's request (no options round): the device's real name, the new documentation as a cleaned web copy | MSIT everywhere, old links redirect; Documents (07) has two cards, the PDF first; older records keep the name they were written with | docs/decisions/2026-11-12-msit-rename.md |
 | 2026-11-22 | Pathways recording crops | Read the Rival fixed by the brief; classroom A leave as is, B bottom band (STATUS pick, sitepolish 11:27) | Read the Rival cropped to rule box, board and result line; classroom A, unchanged | docs/decisions/2026-11-22-pathways-capture-crops.md |
+| 2026-11-22 | Level counter and Contact step | A keep "Level 1 of 4", Contact marked End; B "Step 1 of 5" (STATUS pick, sitepolish 12:54) | A: only the four levels carry numbers in the path | docs/decisions/2026-11-22-hud-level-wording.md |
 
 ## Avoid
 Models drift to the same generic look when left to default. Name what this project avoids.
