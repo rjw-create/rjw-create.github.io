@@ -154,7 +154,7 @@
   function renderPath(finale) {
     els.pathList.textContent = "";
     const items = LEVELS.map((l, i) => ({ no: String(i + 1).padStart(2, "0"), name: l.name, state: progress[i], go: () => (progress[i] === "won" ? showEntry(i, "review") : startLevel(i)), current: !finale && i === levelIndex }));
-    items.push({ no: "05", name: "Contact", state: "finale", go: showFinale, current: !!finale });
+    items.push({ no: "End", name: "Contact", state: "finale", go: showFinale, current: !!finale });
     items.forEach((it) => {
       const li = document.createElement("li");
       const b = document.createElement("button");

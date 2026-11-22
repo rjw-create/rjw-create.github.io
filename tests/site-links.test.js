@@ -55,3 +55,93 @@ test("every screen recording in assets/media is under 10 MB", () => {
     assert.ok(size < 10_000_000, `${clip}: ${size} bytes`);
   }
 });
+
+// Pixel size from a baseline or progressive JPEG's start-of-frame segment.
+function jpegSize(file) {
+  const buf = fs.readFileSync(file);
+  for (let i = 2; i < buf.length; ) {
+    const marker = buf[i + 1];
+    if (marker >= 0xc0 && marker <= 0xc2) return [buf.readUInt16BE(i + 7), buf.readUInt16BE(i + 5)];
+    i += 2 + buf.readUInt16BE(i + 2);
+  }
+  throw new Error(`${file}: no start-of-frame segment`);
+}
+
+// Pixel size of an mp4's video track, from the first track header with a non-zero size (16.16 fixed point).
+function mp4Size(file) {
+  const buf = fs.readFileSync(file);
+  for (let at = buf.indexOf("tkhd"); at !== -1; at = buf.indexOf("tkhd", at + 4)) {
+    const end = at - 4 + buf.readUInt32BE(at - 4);
+    const size = [buf.readUInt32BE(end - 8) >>> 16, buf.readUInt32BE(end - 4) >>> 16];
+    if (size[0] > 0) return size;
+  }
+  throw new Error(`${file}: no video track header`);
+}
+
+// A recording and its poster are cropped together; if they drift apart the clip jumps when it starts playing.
+test("each home-page video, its poster and its width/height attributes have the same size", () => {
+  const html = read("index.html");
+  const videos = [...html.matchAll(/<video src="([^"]+)" poster="([^"]+)" width="(\d+)" height="(\d+)"/g)];
+  assert.ok(videos.length > 0, "no videos found");
+  for (const [, src, poster, width, height] of videos) {
+    const declared = [Number(width), Number(height)];
+    assert.deepEqual(mp4Size(path.join(root, src)), declared, `${src} matches its width/height`);
+    assert.deepEqual(jpegSize(path.join(root, poster)), declared, `${poster} matches ${src}`);
+  }
+});
+
+// The old Mission Board picture was a blurred screenshot of a layout the board no longer has. The entry now
+// shows two drawn stills of the current board; their size attributes must match the files, or the page jumps
+// as they load, and no caption may still talk about blurred figures.
+test("the Mission Board entry shows two current stills whose sizes match their files", () => {
+  const html = read("index.html");
+  const entry = /<article class="entry" id="mission-board"[\s\S]*?<\/article>/.exec(html);
+  assert.ok(entry, "Mission Board entry exists");
+  const images = [...entry[0].matchAll(/<img src="([^"]+)" width="(\d+)" height="(\d+)"/g)];
+  assert.equal(images.length, 2, "two stills");
+  for (const [, src, width, height] of images) {
+    assert.notEqual(src, "assets/media/mission-board.jpg", "the old blurred screenshot is gone");
+    assert.deepEqual(jpegSize(path.join(root, src)), [Number(width), Number(height)], `${src} matches its width/height`);
+  }
+  assert.doesNotMatch(entry[0], /blurred/i);
+});
+
+// Squeezed into a column beside the text, the screenshots shrank to about 470px at 1280 and their labels
+// became unreadable; the media must stay under the text at its full width.
+test("entry media is never put in a column beside the text", () => {
+  const css = read("src/styles/site.css");
+  for (const rule of css.matchAll(/([^{}]*\.media[^{}]*)\{([^}]*)\}/g)) {
+    assert.ok(!/grid-column\s*:\s*2/.test(rule[2]), `${rule[1].trim()} moves media to column 2`);
+  }
+  assert.ok(!/\.entry-body\s*\{[^}]*grid-template-columns/.test(css), ".entry-body has no side-by-side columns");
+});
+
+// Goal, rule and key hint stacked at 16, 20 and 14px read as three competing levels; the panel under the
+// level title keeps two sizes: body for goal and rule, small for the hint.
+test("the rule panel uses two text sizes at every screen width", () => {
+  const css = read("src/styles/site.css");
+  const sizes = new Set();
+  for (const rule of css.matchAll(/([^{}]*\.rule[-\w]*[^{}]*)\{([^}]*)\}/g)) {
+    const size = /font-size\s*:\s*([^;]+)/.exec(rule[2]);
+    if (size) sizes.add(size[1].trim());
+  }
+  assert.deepEqual([...sizes].sort(), ["var(--text-body)", "var(--text-small)"]);
+});
+
+// The HUD counts levels ("Level 1 of 4"); a numbered Contact step ("05") made the path look like five levels.
+test("only the four levels carry numbers in the path; Contact is marked End", () => {
+  const js = read("src/js/site.js");
+  assert.match(js, /Level \$\{i \+ 1\} of \$\{LEVELS\.length\}/, "HUD counts levels");
+  const contact = /items\.push\(\{[^}]*name: "Contact"[^}]*\}\)/.exec(js);
+  assert.ok(contact, "the path adds a Contact step");
+  assert.match(contact[0], /no: "End"/);
+});
+
+// "Read without playing" wraps to two lines at 375px; with the browser's default leading (about 1.29x for
+// IBM Plex Mono) its lines sat too close. Tool buttons set the body leading instead.
+test("tool buttons set their own line height", () => {
+  const css = read("src/styles/site.css");
+  const tool = /(?:^|\n)\.tool\s*\{([^}]*)\}/.exec(css);
+  assert.ok(tool, ".tool rule exists");
+  assert.match(tool[1], /line-height\s*:\s*var\(--leading-body\)/);
+});
