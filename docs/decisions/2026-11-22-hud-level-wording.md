@@ -4,7 +4,7 @@ Date: 2026-11-22
 Status: Accepted
 
 ## Context
-The 2026-11-21 design critique of the site (https://claude.ai/artifact/LzostgFJsnfMkXBaf66zkr) found that the
+The 2026-11-21 design critique of the site (linked in the PR) found that the
 top bar says "Level 1 of 4" while the level path beside the board lists five numbered steps, 01 to 05, with the
 Contact finale as 05. A visitor reads that as five levels and a counter that is off by one.
 

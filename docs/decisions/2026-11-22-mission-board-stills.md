@@ -4,7 +4,7 @@ Date: 2026-11-22
 Status: Accepted
 
 ## Context
-The 2026-11-21 design critique of the site (https://claude.ai/artifact/LzostgFJsnfMkXBaf66zkr) found that the
+The 2026-11-21 design critique of the site (linked in the PR) found that the
 Mission Board entry showed a blurred screenshot of tabs the board no longer has (Now, Jobs, Night, System; taken
 13 Nov). Jackson approved (2026-11-22 11:18) replacing it with two drawn stills of the current layout made with
 the stageshow kit outside the repo, committing only the images and showing no real figures.
