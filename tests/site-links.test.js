@@ -89,3 +89,13 @@ test("each home-page video, its poster and its width/height attributes have the 
     assert.deepEqual(jpegSize(path.join(root, poster)), declared, `${poster} matches ${src}`);
   }
 });
+
+// Squeezed into a column beside the text, the screenshots shrank to about 470px at 1280 and their labels
+// became unreadable; the media must stay under the text at its full width.
+test("entry media is never put in a column beside the text", () => {
+  const css = read("src/styles/site.css");
+  for (const rule of css.matchAll(/([^{}]*\.media[^{}]*)\{([^}]*)\}/g)) {
+    assert.ok(!/grid-column\s*:\s*2/.test(rule[2]), `${rule[1].trim()} moves media to column 2`);
+  }
+  assert.ok(!/\.entry-body\s*\{[^}]*grid-template-columns/.test(css), ".entry-body has no side-by-side columns");
+});

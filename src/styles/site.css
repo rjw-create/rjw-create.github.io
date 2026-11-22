@@ -631,10 +631,10 @@ mark { padding: 0 var(--space-half); background: var(--color-highlight); color: 
     padding: var(--space-6) var(--space-6) var(--space-6) var(--space-12);
   }
   .entry::before { left: var(--space-8); }
-  .entry-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--space-6); align-items: start; }
-  .entry-body > .media { grid-column: 2; grid-row: 1 / span 4; margin-top: 0; }
-  .entry-body > :not(.media) { grid-column: 1; }
-  #story .entry-body { display: block; }
+  /* Media sits under the text at the full entry width: beside the text, screenshots shrank so far their labels
+     were unreadable. Each slot stops at its picture's own width, so a small capture is not blown up. */
+  .entry-body > .media { justify-items: start; }
+  .entry-body > .media figcaption { contain: inline-size; }
   .sheet .entry { padding: var(--space-4) var(--space-4) var(--space-4) var(--space-8); }
   .sheet .entry::before { left: var(--space-4); }
 }
