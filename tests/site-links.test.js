@@ -55,3 +55,37 @@ test("every screen recording in assets/media is under 10 MB", () => {
     assert.ok(size < 10_000_000, `${clip}: ${size} bytes`);
   }
 });
+
+// Pixel size from a baseline or progressive JPEG's start-of-frame segment.
+function jpegSize(file) {
+  const buf = fs.readFileSync(file);
+  for (let i = 2; i < buf.length; ) {
+    const marker = buf[i + 1];
+    if (marker >= 0xc0 && marker <= 0xc2) return [buf.readUInt16BE(i + 7), buf.readUInt16BE(i + 5)];
+    i += 2 + buf.readUInt16BE(i + 2);
+  }
+  throw new Error(`${file}: no start-of-frame segment`);
+}
+
+// Pixel size of an mp4's video track, from the first track header with a non-zero size (16.16 fixed point).
+function mp4Size(file) {
+  const buf = fs.readFileSync(file);
+  for (let at = buf.indexOf("tkhd"); at !== -1; at = buf.indexOf("tkhd", at + 4)) {
+    const end = at - 4 + buf.readUInt32BE(at - 4);
+    const size = [buf.readUInt32BE(end - 8) >>> 16, buf.readUInt32BE(end - 4) >>> 16];
+    if (size[0] > 0) return size;
+  }
+  throw new Error(`${file}: no video track header`);
+}
+
+// A recording and its poster are cropped together; if they drift apart the clip jumps when it starts playing.
+test("each home-page video, its poster and its width/height attributes have the same size", () => {
+  const html = read("index.html");
+  const videos = [...html.matchAll(/<video src="([^"]+)" poster="([^"]+)" width="(\d+)" height="(\d+)"/g)];
+  assert.ok(videos.length > 0, "no videos found");
+  for (const [, src, poster, width, height] of videos) {
+    const declared = [Number(width), Number(height)];
+    assert.deepEqual(mp4Size(path.join(root, src)), declared, `${src} matches its width/height`);
+    assert.deepEqual(jpegSize(path.join(root, poster)), declared, `${poster} matches ${src}`);
+  }
+});
