@@ -120,3 +120,12 @@ test("only the four levels carry numbers in the path; Contact is marked End", ()
   assert.ok(contact, "the path adds a Contact step");
   assert.match(contact[0], /no: "End"/);
 });
+
+// "Read without playing" wraps to two lines at 375px; with the browser's default leading (about 1.29x for
+// IBM Plex Mono) its lines sat too close. Tool buttons set the body leading instead.
+test("tool buttons set their own line height", () => {
+  const css = read("src/styles/site.css");
+  const tool = /(?:^|\n)\.tool\s*\{([^}]*)\}/.exec(css);
+  assert.ok(tool, ".tool rule exists");
+  assert.match(tool[1], /line-height\s*:\s*var\(--leading-body\)/);
+});
