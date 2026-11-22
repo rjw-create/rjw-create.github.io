@@ -90,6 +90,22 @@ test("each home-page video, its poster and its width/height attributes have the 
   }
 });
 
+// The old Mission Board picture was a blurred screenshot of a layout the board no longer has. The entry now
+// shows two drawn stills of the current board; their size attributes must match the files, or the page jumps
+// as they load, and no caption may still talk about blurred figures.
+test("the Mission Board entry shows two current stills whose sizes match their files", () => {
+  const html = read("index.html");
+  const entry = /<article class="entry" id="mission-board"[\s\S]*?<\/article>/.exec(html);
+  assert.ok(entry, "Mission Board entry exists");
+  const images = [...entry[0].matchAll(/<img src="([^"]+)" width="(\d+)" height="(\d+)"/g)];
+  assert.equal(images.length, 2, "two stills");
+  for (const [, src, width, height] of images) {
+    assert.notEqual(src, "assets/media/mission-board.jpg", "the old blurred screenshot is gone");
+    assert.deepEqual(jpegSize(path.join(root, src)), [Number(width), Number(height)], `${src} matches its width/height`);
+  }
+  assert.doesNotMatch(entry[0], /blurred/i);
+});
+
 // Squeezed into a column beside the text, the screenshots shrank to about 470px at 1280 and their labels
 // became unreadable; the media must stay under the text at its full width.
 test("entry media is never put in a column beside the text", () => {
