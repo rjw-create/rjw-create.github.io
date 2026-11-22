@@ -614,7 +614,6 @@ mark { padding: 0 var(--space-half); background: var(--color-highlight); color: 
   .path-state { display: block; }
   html { scroll-padding-top: var(--space-12); }
   .level-title { font-size: var(--text-title); }
-  .rule-text { font-size: var(--text-subheading); line-height: 1.35; }
   .status { min-height: calc(var(--text-body) * var(--leading-body) * 3); margin-top: var(--space-2); }
   .path { justify-self: end; max-width: 15rem; }
   .path-list { grid-template-columns: 1fr; gap: var(--space-1); }

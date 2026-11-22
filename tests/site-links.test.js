@@ -99,3 +99,15 @@ test("entry media is never put in a column beside the text", () => {
   }
   assert.ok(!/\.entry-body\s*\{[^}]*grid-template-columns/.test(css), ".entry-body has no side-by-side columns");
 });
+
+// Goal, rule and key hint stacked at 16, 20 and 14px read as three competing levels; the panel under the
+// level title keeps two sizes: body for goal and rule, small for the hint.
+test("the rule panel uses two text sizes at every screen width", () => {
+  const css = read("src/styles/site.css");
+  const sizes = new Set();
+  for (const rule of css.matchAll(/([^{}]*\.rule[-\w]*[^{}]*)\{([^}]*)\}/g)) {
+    const size = /font-size\s*:\s*([^;]+)/.exec(rule[2]);
+    if (size) sizes.add(size[1].trim());
+  }
+  assert.deepEqual([...sizes].sort(), ["var(--text-body)", "var(--text-small)"]);
+});
