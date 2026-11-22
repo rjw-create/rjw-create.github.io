@@ -178,6 +178,7 @@ One row per approved UI choice; the full record (context, options, decision, con
 | 2026-11-12 | MSIT rename and documentation PDF | Jackson's request (no options round): the device's real name, the new documentation as a cleaned web copy | MSIT everywhere, old links redirect; Documents (07) has two cards, the PDF first; older records keep the name they were written with | docs/decisions/2026-11-12-msit-rename.md |
 | 2026-11-22 | Pathways recording crops | Read the Rival fixed by the brief; classroom A leave as is, B bottom band (STATUS pick, sitepolish 11:27) | Read the Rival cropped to rule box, board and result line; classroom A, unchanged | docs/decisions/2026-11-22-pathways-capture-crops.md |
 | 2026-11-22 | Level counter and Contact step | A keep "Level 1 of 4", Contact marked End; B "Step 1 of 5" (STATUS pick, sitepolish 12:54) | A: only the four levels carry numbers in the path | docs/decisions/2026-11-22-hud-level-wording.md |
+| 2026-11-22 | Mission Board stills | A keep the two drawn stills as built; B phone crop plus side by side at half width (STATUS pick, sitepolish 14:20) | A: stills kept, critique noted in the PR | docs/decisions/2026-11-22-mission-board-stills.md |
 
 ## Avoid
 Models drift to the same generic look when left to default. Name what this project avoids.
